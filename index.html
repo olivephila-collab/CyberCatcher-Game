@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Catcher</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center p-4 relative">
+    <div id="notif-chat" class="hidden absolute top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-slate-950 border-cyan-400 rounded-xl shadow-[0_0_20px_rgba(34,211,238,0.5)] z-50 animate-bounce">
+        <div class="bg-cyan-450/90 px-3 py-1.5 border-b border-cyan-500/50 flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-cyan-400 font-mono text-[11px] font-bold tracking-wider">
+            <span></span>
+            <span id="notif-header-title">MESSAGES</span>
+        </div>
+        </div>
+
+    <div class="p-3 bg-slate-900/95 relative text-left rounded-b-xl">
+        <p id="notif-pesan" class="text-xs text-cyan-100 font-mono leading-relaxed">
+          Hii! Nice to Mitya!
+        </p>
+
+        <div class="absolute -bottom-2.5 right-3 bg-cyan-400 text-slate-950 text-[9px] font-mono font-extrabold px-2 py-0.5 rounded-md border border-cyan-200 shadow-md uppercase tracking-wider">
+          LET'S GO!
+        </div>
+      </div>
+    </div>
+
+    <h1 class="text-4xl font-extrabold text-indigo-400 mb-2">CYBER CATCHER</h1>
+    <p class="text-slate-300 mb-6">Interactive Cybersecurity Mini-Game</p>
+
+    <div class="relative w-full max-w-xl rounded-2xl overflow-hidden border-4 border-indigo-500 shadow-2xl">
+
+        <div id="start-screen" class="relative">
+            <img id="gambar-start" src="bg-start-1.jpeg" alt="Start Screen CyberCatcher" class="w-full h-auto">
+
+            <div class="absolute inset-0 flex items-center justify-center">
+
+                <button onclick="mulaiGame()" class="absolute bottom-[24%] w-36 h-36 bg-transparent rounded-full cursor-pointer transition border-2 border-transparent"></button>
+            </div>
+        </div>
+
+       
+    <div id="pilih-karakter" class="hidden p-6 bg-black text-center flex flex-col items-center justify-between min-h-[420px]">
+      
+      <h2 class="text-2xl font-extrabold text-amber-500 font-mono tracking-wider uppercase mb-2">PILIH KARAKTER KAMU!</h2>
+      
+      
+
+      <div class="relative w-full flex items-center justify-center gap-2 my-auto">
+        
+        <button id="btn-kiri" onclick="geserKarakter(-1)" class="text-amber-500 hover:text-amber-300 text-2xl font-bold p-2 z-10 cursor-pointer active:scale-95 transition">
+          ◀
+        </button>
+
+        <div class="flex items-center justify-center gap-3 overflow-hidden py-4">
+          
+      
+          <div id="card-left" class="w-28 opacity-50 scale-90 blur-[0.5px] transition-all duration-300 flex flex-col items-center">
+            <img id="img-left" src="k1-idle.png" class="w-full h-auto object-contain">
+          </div>
+
+          
+          <div class="w-44 bg-gradient-to-b from-rose-500 to-rose-700 border-4 border-amber-200 rounded-2xl p-3 shadow-[0_0_20px_rgba(244,63,94,0.6)] transform transition-all duration-300 flex flex-col items-center">
+            <h3 id="nama-karakter-tengah" class="text-base font-extrabold text-white font-mono uppercase tracking-widest mb-1 drop-shadow">BAHTIAR</h3>
+            <div class="w-44 h-48 flex items-center justify-center overflow-hidden">
+              <img id="img-center" src="k3-biasa.png" class="w-full h-full scale-125 object-contain drop-shadow-lg">
+            </div>
+          </div>
+
+          
+          <div id="card-right" class="w-28 opacity-50 scale-90 blur-[0.5px] transition-all duration-300 flex flex-col items-center">
+            <img id="img-right" src="k2-idle.png" class="w-full h-auto object-contain">
+          </div>
+
+        </div>
+
+        <button id="btn-kanan" onclick="geserKarakter(1)" class="text-amber-500 hover:text-amber-300 text-2xl font-bold p-2 z-10 cursor-pointer active:scale-95 transition">
+          ▶
+        </button>
+      </div>
+
+      
+      <div class="mt-2 font-mono">
+        <p id="teks-tanya"class="text-amber-400 font-bold text-sm tracking-widest mb-2">
+          PILIH DIA?
+        </p>
+        <div class="flex justify-center gap-6 text-sm font-bold">
+          <button onclick="konfirmasiKarakter()" class="text-amber-300 hover:text-white flex items-center gap-1 cursor-pointer transition">
+            <span class="animate-pulse">▶</span> YES
+          </button>
+          <button id="btn-no" onclick="batalPilih()" class="hidden text-slate-500 hover:text-slate-300 cursor-pointer">
+            CANCEL
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div> 
+
+  <script>
+    const gambar1 = "bg-start-1.jpeg";
+    const gambar2 = "bg-start-2.jpeg";
+    let statusGambar = 1;
+    let isLocked = false;
+    let stepKonfirmasi = 1;
+
+    const animasiStart = setInterval(function() {
+      const imgElement = document.getElementById("gambar-start");
+      if (imgElement) {
+        if (statusGambar === 1) {
+          imgElement.src = gambar2;
+          statusGambar = 2;
+        } else {
+          imgElement.src = gambar1;
+          statusGambar = 1;
+        }
+      }
+    }, 400);
+
+    
+    const listKarakter = [
+      { id: 1, key: "k1", nama: "Lily", warna: "from-emerald-500 to-teal-700", pesan: "Hei, heii! The name's Lily! So glad we teamed up, partner! Now buckle up and win this game! Shall we?" },
+      { id: 2, key: "k2", nama: "Ayu", warna: "from-rose-500 to-rose-700", pesan: "Hai, partner! Aku Ayu. Misi kita dimulai sekarang! Detect, Inspect, Protect! Siap?" },
+      { id: 3, key: "k3", nama: "Bahtiar", warna: "from-cyan-500 to-blue-700", pesan: "Iyeayy, I'm Bahtiar! Let's play, 'cause kita adalah partner di game ini!" }
+    ];
+
+    let indexSekarang = 0;
+    let agentAktif = "k1";
+    let namaAgentTerpilih = "Lily";
+    let pesanAgentTerpilih = "";
+
+    function updateTampilanCarousel() {
+      const total = listKarakter.length;
+      const idxTengah = indexSekarang;
+      const idxKiri = (indexSekarang - 1 + total) % total;
+      const idxKanan = (indexSekarang + 1) % total;
+      const cardCenter = document.querySelector('.w-44');
+      if (cardCenter) {
+        cardCenter.className = `w-44 bg-gradient-to-b ${listKarakter[idxTengah].warna} border-4 border-amber-200 rounded-2xl p-3 shadow-lg transform transition-all duration-300 flex flex-col items-center`;
+     }
+
+      document.getElementById('img-left').src = `${listKarakter[idxKiri].key}-idle.png`;
+      document.getElementById('img-right').src = `${listKarakter[idxKanan].key}-idle.png`;
+
+      const imgCenter = document.getElementById('img-center');
+      if (imgCenter) {
+        imgCenter.src = `${listKarakter[idxTengah].key}-biasa.png`;
+        imgCenter.classList.remove('scale-110');
+      }
+      
+      document.getElementById('nama-karakter-tengah').innerText = listKarakter[idxTengah].nama;
+
+      agentAktif = listKarakter[idxTengah].key;
+      namaAgentTerpilih = listKarakter[idxTengah].nama;
+      pesanAgentTerpilih = listKarakter[idxTengah].pesan;
+    }
+
+    function geserKarakter(arah) {
+      if (isLocked) return;
+      const total = listKarakter.length;
+      indexSekarang = (indexSekarang + arah + total) % total;
+      updateTampilanCarousel();
+    }
+
+    function mulaiGame() {
+      document.getElementById("gambar-start").classList.add("hidden");
+      clearInterval(animasiStart);
+      document.getElementById("start-screen").classList.add("hidden");
+      document.getElementById("pilih-karakter").classList.remove("hidden");
+      document.getElementById('btn-no').classList.add('hidden');
+      updateTampilanCarousel();
+    }
+    function konfirmasiKarakter() {
+      document.getElementById('teks-tanya').innerText = "YAKIN?";
+      if (stepKonfirmasi === 1) {
+        stepKonfirmasi = 2;
+        const btnYes = document.getElementById('btn-yes');
+        if (btnYes) {
+          btnYes.innerHTML = '<span class="animate-pulse">▶</span> YAKIN?';
+        }
+        
+        document.getElementById('btn-no').classList.remove('hidden');
+        
+      isLocked = true;
+      document.getElementById('btn-kiri').classList.add('hidden');
+      document.getElementById('btn-kanan').classList.add('hidden');
+      const imgCenter = document.getElementById('img-center');
+      if (imgCenter) {
+        imgCenter.src = `${agentAktif}-siap.png`;
+        imgCenter.classList.add('scale-110', 'transition-transform');
+      }
+
+      
+
+      const notifChat = document.getElementById('notif-chat');
+      const notifHeader = document.getElementById('notif-header-title');
+      const notifPesan = document.getElementById('notif-pesan');
+
+      if (notifChat) {
+        if (notifHeader) notifHeader.innerText = `MESSAGES`;
+        if (notifPesan) notifPesan.innerText = pesanAgentTerpilih;
+        notifChat.classList.remove('hidden');
+      }
+
+    } else {
+      document.getElementById('pilih-karakter').classList.add('hidden');
+      document.getElementById('notif-chat').classList.add('hidden');
+    }
+    }
+
+    function batalPilih() {
+      stepKonfirmasi = 1;
+      const teksTanya = document.getElementById('teks-tanya');
+      if (teksTanya) {
+        teksTanya.innerText = "PILIH DIA?";
+      }
+
+      const btnNo = document.getElementById('btn-no');
+      if (btnNo) btnNo.classList.add('hidden')
+    
+
+      const btnKiri = document.getElementById('btn-kiri');
+      const btnKanan = document.getElementById('btn-kanan');
+      if (btnKiri) {
+        btnKiri.classList.remove('hidden');
+      }
+      if (btnKanan) {
+        btnKanan.classList.remove('hidden');
+      }
+      
+      isLocked = false;
+      const notifChat = document.getElementById('notif-chat');
+      if (notifChat) notifChat.classList.add('hidden');
+
+      const imgCenter = document.getElementById('img-center');
+      if (imgCenter) {
+        imgCenter.src = `${agentAktif}-biasa.png`;
+        imgCenter.classList.remove('scale-110');
+      }
+      
+    }
+  </script>
+</body>
+</html>
