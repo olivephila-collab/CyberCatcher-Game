@@ -208,6 +208,13 @@
     } else {
       document.getElementById('pilih-karakter').classList.add('hidden');
       document.getElementById('notif-chat').classList.add('hidden');
+      const menuPilih = document.getElementById('pilih-karakter');
+      menuPilih.classList.add('scale-125', 'blur-md', 'opacity-0', 'transition-all', 'duration-700');
+      setTimeout(() => {
+        menuPilih.classList.add('hidden');
+        menuPilih.classList.remove('scale-125', 'blur-md', 'opacity-0');
+        document.getElementById('arena1').classList.remove('hidden');
+      }, 700);
     }
     }
 
