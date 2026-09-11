@@ -95,24 +95,24 @@
           </button>
         </div>
       </div>
-    
-      <div id="arena1" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
+    </div>
+  </div> 
+
+    <div id="basecamp" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
         <div class="mb-2 text-cyan-400 font-mono text-sm tracking-widest">
         </div>
-
-
-        <div id="arena1" class="relative w-[800px] h-[459px] border-2 border-cyan-500 rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
-          <img src="arena1.jpeg" class="w-full h-full object-cover opacity-60">
-          <img id="player" src="agent-biasa.png" class="absolute w-12 h-12 transition-alll duration-75" style="top: 200px; left: 376px;">
+        
+         <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+          <img src="basecamp.png" class="w-full h-full object-contain">
+          <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"
+          ></div>
+          <img id="player" src="lily animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 145px; left: 341px;">
         </div>
 
         <div class="mt-4 text-slate-400 text-xs font-mono">
           Gunakan tombol panah atau WASD untuk menggerakkan karakter. Tekan tombol spasi untuk melakukan aksi.
         </div>
       </div>
-    </div>
-
-  </div> 
 
   <script>
     const gambar1 = "bg-start-1.jpeg";
@@ -145,6 +145,13 @@
     let agentAktif = "k1";
     let namaAgentTerpilih = "Lily";
     let pesanAgentTerpilih = "";
+
+    function inisialAgen(keyAgent) {
+        if (keyAgent === 'k1') return 'L'; 
+        if (keyAgent === 'k2') return 'A';
+        if (keyAgent === 'k3') return 'B';
+        return keyAgent;
+      }
 
     function updateTampilanCarousel() {
       const total = listKarakter.length;
@@ -207,7 +214,6 @@
         imgCenter.classList.add('scale-110', 'transition-transform');
       }
 
-      
 
       const notifChat = document.getElementById('notif-chat');
       const notifHeader = document.getElementById('notif-header-title');
@@ -223,14 +229,27 @@
       document.getElementById('pilih-karakter').classList.add('hidden');
       document.getElementById('notif-chat').classList.add('hidden');
       const menuPilih = document.getElementById('pilih-karakter');
-      menuPilih.classList.add('scale-125', 'blur-md', 'opacity-0', 'transition-all', 'duration-700');
-      setTimeout(() => {
-        menuPilih.classList.add('hidden');
-        menuPilih.classList.remove('scale-125', 'blur-md', 'opacity-0');
-        document.getElementById('arena1').classList.remove('hidden');
-      }, 700);
+      if (menuPilih) {
+        menuPilih.classList.add('scale-125', 'blur-md', 'opacity-0', 'transition-all', 'duration-200');
+      
+        setTimeout(() => {
+          menuPilih.classList.add('hidden');
+          menuPilih.classList.remove('scale-125', 'blur-md', 'opacity-0');
+
+          const playerImg = document.getElementById('player');
+          if (playerImg) {
+            const awalan = inisialAgen(agentAktif);
+            playerImg.src = `char animated/${awalan}-diamDepan.png`;
+          }
+
+          const basecamp = document.getElementById('basecamp');
+          if (basecamp) {
+            basecamp.classList.remove('hidden');
+          }
+        }, 200);
+      }
     }
-    }
+  }
 
     function batalPilih() {
       stepKonfirmasi = 1;
@@ -263,6 +282,176 @@
       }
       
     }
+
+  let posX = 341;
+  let posY = 145;
+  let arahTerakhir = 'Depan';
+  const kecepatan = 5;
+
+  const daftarRintangan = [
+  // meja resepsionis
+  // sisi kiri
+  { x: 256, y: 100, w: 30, h: 95 },
+
+  // sisi bawah
+  { x: 256, y: 150, w: 140, h: 45 },
+
+  // sisi kanan
+  { x: 366, y: 100, w: 30, h: 95 },
+
+  // pot pohon
+  { x: 226, y: 30, w: 40, h: 30 },
+
+  // sofa panjang
+  { x: 136, y: 80, w: 40, h: 170 },
+
+  // pot kesyiL
+  { x: 301, y: 280, w: 30, h: 30},
+
+  // pot kesyiR
+  { x: 496, y: 225, w: 30, h: 30},
+
+  // sofa depan papan tulis
+  { x: 536, y: 35, w: 20, h: 50},
+  ];
+
+  function cekPintuKeluar(x, y) {
+    const areaPintuKeluar = {
+      minX: 311,
+      maxX: 381,
+      minY: 0,
+      maxY: 0,
+    };
+
+    if (x >= areaPintuKeluar.minX && x <= areaPintuKeluar,maxX && y >= areaPintuKeluar.minY && y <= areaPintuKeluar.maxY) {
+      pindahMapLuar();
+    }
+  }
+
+  function pindahMapLuar() {
+    console.log("Bentar yahh..");
+    if (basecamp) {
+      basecamp.classList.add('hidden');
+    }
+
+    const mapLuar = document.getElementById('map-luar');
+    if (mapLuar) {
+      mapLuar.classList.remove('hidden');
+    }
+
+    posX = 50;
+    posY = 200;
+  }
+
+  function apakahAreaAman(nextX, nextY) {
+    // lorong kanan
+    if (nextX > 580 && nextY < 230) {
+      if (nextX > 150 || nextY < 165) return false;
+    }
+
+    // dinding utama
+    else {
+      if (nextX < 136 || nextX > 556) return false;
+      if (nextY < 0 || nextY > 310) return false;
+    }
+
+    // meja panjang bawah
+    if (nextX > 376 && nextX < 446 && nextY > 200 && nextY < 320) {
+      return false;
+    }
+
+
+    for (let box of daftarRintangan) {
+      if (
+        nextX >= box.x &&
+        nextX <= box.x + box.w &&
+        nextY >= box.y &&
+        nextY <= box.y + box.h
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  
+
+  let frameLari = 1;
+  let waktuLangkahTerakhir = 0;
+  const jedaAntaraLangkah = 200;
+
+  window.addEventListener('keydown', function(event) {
+    const basecamp = document.getElementById('basecamp');
+
+    if (basecamp && !basecamp.classList.contains('hidden')) {
+      console.log("X:", posX, "Y:", posY);
+      const playerImg = document.getElementById('player');
+      const awalan = inisialAgen(agentAktif);
+
+      let arah = '';
+      let maxFrame = 3;
+      let nextX = posX;
+      let nextY = posY;
+
+      if (event.key === 'ArrowUp' || event.key === 'w' || event.key === 'W') {
+        nextY = posY - kecepatan;
+        arah = 'Belakang';
+        maxFrame = 2;
+      } 
+      else if (event.key === 'ArrowDown' || event.key === 's' || event.key === 'S') {
+        nextY = posY + kecepatan;
+        arah = 'Depan';
+        maxFrame = 3;
+      } 
+      else if (event.key === 'ArrowLeft' || event.key === 'a' || event.key === 'A') {
+        nextX = posX - kecepatan;
+        arah = 'Kiri';
+        maxFrame = 3;
+      } 
+      else if (event.key === 'ArrowRight' || event.key === 'd' || event.key === 'D') {
+        nextX = posX + kecepatan;
+        arah = 'Kanan';
+        maxFrame = 3;
+      }
+      
+      if (arah !== '') {
+        arahTerakhir = arah;
+
+        if (apakahAreaAman(nextX, nextY)) {
+         posX = nextX;
+         posY = nextY;
+
+         cekPintuKeluar(posX, posY);
+        }
+
+        const waktuSekarang = Date.now();
+        if (waktuSekarang - waktuLangkahTerakhir > jedaAntaraLangkah) {
+         frameLari = (frameLari % maxFrame) + 1;
+        
+        if (playerImg) {
+          playerImg.src = `char animated/${awalan}-lari${arah}${frameLari}.png`;
+        }
+
+        waktuLangkahTerakhir = waktuSekarang;
+       }
+      }
+
+      if (playerImg) {
+        playerImg.style.left = posX + 'px';
+        playerImg.style.top = posY + 'px';
+      }
+    }
+  });
+
+  window.addEventListener('keyup', function(event) {
+    const playerImg = document.getElementById('player');
+    const awalan = inisialAgen(agentAktif);
+
+    if (playerImg) {
+      playerImg.src = `char animated/${awalan}-diam${arahTerakhir}.png`;
+    }
+  });
   </script>
 </body>
 </html>
