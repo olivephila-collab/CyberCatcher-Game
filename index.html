@@ -106,7 +106,7 @@
           <img src="basecamp.png" class="w-full h-full object-contain">
           <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"
           ></div>
-          <img id="player" src="lily animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 145px; left: 341px;">
+          <img id="player" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 145px; left: 341px;">
         </div>
 
         <div id="petunjuk" class="mt-4 text-slate-400 text-xs font-mono">
@@ -114,14 +114,25 @@
         </div>
     </div>
 
-    <div id="map-luar" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
+    <div id="loading-screen" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
       <h2 class="text-2xl text-cyan-400 font-mono mb-4">Bentar yaa..</h2>
+    </div>
+
+     <div id="map-luar" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
+        <div class="mb-2 text-cyan-400 font-mono text-sm tracking-widest">
+        </div>
+        
+         <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+          <img src="map-luar.png" class="w-full h-full object-contain">
+          <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"
+          ></div>
+          <img id="player-luar" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 300px; left: 341px;">
+        </div>
     </div>
 
   <script>
     const gambar1 = "bg-start-1.jpeg";
     const gambar2 = "bg-start-2.jpeg";
-    const playerImg = document.getElementById('player');
     let statusGambar = 1;
     let isLocked = false;
     let stepKonfirmasi = 1;
@@ -375,10 +386,17 @@
 
   window.addEventListener('keydown', function(event) {
     const basecamp = document.getElementById('basecamp');
+    const mapLuar = document.getElementById('map-luar');
 
-    if (basecamp && !basecamp.classList.contains('hidden')) {
+    const diBasecamp = basecamp && !basecamp.classList.contains('hidden');
+    const diMapLuar = mapLuar && !mapLuar.classList.contains('hidden');
+
+    if (diBasecamp || diMapLuar) {
       console.log("X:", posX, "Y:", posY);
-      const playerImg = document.getElementById('player');
+      const playerImg = diBasecamp
+        ? document.getElementById('player')
+        : document.getElementById('player-luar')
+
       const awalan = inisialAgen(agentAktif);
 
       let arah = '';
@@ -417,11 +435,16 @@
           }
         }
 
-        if (apakahAreaAman(nextX, nextY)) {
-         posX = nextX;
-         posY = nextY;
-
-         cekPintuKeluar(posX, posY);
+        if (diBasecamp) {
+          if (apakahAreaAman(nextX, nextY)) {
+            posX = nextX;
+            posY = nextY;
+ 
+            cekPintuKeluar(posX, posY);
+          }
+        } else if (diMapLuar) {
+          posX =nextX;
+          posY = nextY;
         }
 
         const waktuSekarang = Date.now();
@@ -444,7 +467,14 @@
   });
 
   window.addEventListener('keyup', function(event) {
-    const playerImg = document.getElementById('player');
+    const basecamp = document.getElementById('basecamp');
+    const mapLuar = document.getElementById('map-luar');
+
+    const diBasecamp = basecamp && !basecamp.classList.contains('hidden');
+    const playerImg = diBasecamp
+      ? document.getElementById('player')
+      : document.getElementById('player-luar')
+
     const awalan = inisialAgen(agentAktif);
 
     if (playerImg) {
@@ -459,10 +489,10 @@
     const basecamp = document.getElementById('basecamp');
     const mapLuar = document.getElementById('map-luar');
     
-    
     if (loading) {
       loading.classList.remove('hidden');
     } 
+    
 
     setTimeout(() => {
       if (basecamp) basecamp.classList.add('hidden');
@@ -471,12 +501,16 @@
         mapLuar.classList.remove('hidden');
       }
       
+      
       posX = 341;
-      posY = 500;
+      posY = 200;
 
-      if (playerImg) {
-        playerImg.style.left = `${posX}px`;
-        playerImg.style.top = `${posY}px`;
+      const playerLuar = document.getElementById('player-luar')
+;      if (playerLuar) {
+        const awalan = inisialAgen(agentAktif);
+        playerLuar.src = `char animated/${awalan}-diamDepan.png`
+        playerLuar.style.left = `${posX}px`;
+        playerLuar.style.top = `${posY}px`;
       }
     }, 200);
   }
