@@ -109,17 +109,23 @@
           <img id="player" src="lily animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 145px; left: 341px;">
         </div>
 
-        <div class="mt-4 text-slate-400 text-xs font-mono">
+        <div id="petunjuk" class="mt-4 text-slate-400 text-xs font-mono">
           Gunakan tombol panah atau WASD untuk menggerakkan karakter. Tekan tombol spasi untuk melakukan aksi.
         </div>
-      </div>
+    </div>
+
+    <div id="map-luar" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
+      <h2 class="text-2xl text-cyan-400 font-mono mb-4">Bentar yaa..</h2>
+    </div>
 
   <script>
     const gambar1 = "bg-start-1.jpeg";
     const gambar2 = "bg-start-2.jpeg";
+    const playerImg = document.getElementById('player');
     let statusGambar = 1;
     let isLocked = false;
     let stepKonfirmasi = 1;
+    let sedangPindahMap = false;
 
     const animasiStart = setInterval(function() {
       const imgElement = document.getElementById("gambar-start");
@@ -287,6 +293,7 @@
   let posY = 145;
   let arahTerakhir = 'Depan';
   const kecepatan = 4;
+  let petunjuk = false;
 
   const daftarRintangan = [
   // meja resepsionis
@@ -319,29 +326,16 @@
     const areaPintuKeluar = {
       minX: 311,
       maxX: 381,
-      minY: 0,
-      maxY: 0,
+      minY: 1,
+      maxY: 5,
     };
 
-    if (x >= areaPintuKeluar.minX && x <= areaPintuKeluar,maxX && y >= areaPintuKeluar.minY && y <= areaPintuKeluar.maxY) {
+    if (x >= areaPintuKeluar.minX && x <= areaPintuKeluar.maxX && y >= areaPintuKeluar.minY && y <= areaPintuKeluar.maxY && !sedangPindahMap) {
       pindahMapLuar();
     }
   }
 
-  function pindahMapLuar() {
-    console.log("Bentar yahh..");
-    if (basecamp) {
-      basecamp.classList.add('hidden');
-    }
-
-    const mapLuar = document.getElementById('map-luar');
-    if (mapLuar) {
-      mapLuar.classList.remove('hidden');
-    }
-
-    posX = 50;
-    posY = 200;
-  }
+  // DISINI
 
   function apakahAreaAman(nextX, nextY) {
     // lorong kanan
@@ -416,9 +410,18 @@
       if (arah !== '') {
         arahTerakhir = arah;
 
+        if (!petunjuk) {
+          const petunjuk = document.getElementById('petunjuk');
+          if (petunjuk) {
+            petunjuk.remove()
+          }
+        }
+
         if (apakahAreaAman(nextX, nextY)) {
          posX = nextX;
          posY = nextY;
+
+         cekPintuKeluar(posX, posY);
         }
 
         const waktuSekarang = Date.now();
@@ -448,6 +451,35 @@
       playerImg.src = `char animated/${awalan}-diam${arahTerakhir}.png`;
     }
   });
+
+  function pindahMapLuar() {
+    sedangPindahMap = true;
+
+    const loading = document.getElementById('loading-screen');
+    const basecamp = document.getElementById('basecamp');
+    const mapLuar = document.getElementById('map-luar');
+    
+    
+    if (loading) {
+      loading.classList.remove('hidden');
+    } 
+
+    setTimeout(() => {
+      if (basecamp) basecamp.classList.add('hidden');
+      if (loading) loading.classList.add('hidden');
+      if (mapLuar) {
+        mapLuar.classList.remove('hidden');
+      }
+      
+      posX = 341;
+      posY = 500;
+
+      if (playerImg) {
+        playerImg.style.left = `${posX}px`;
+        playerImg.style.top = `${posY}px`;
+      }
+    }, 200);
+  }
   </script>
 </body>
 </html>
