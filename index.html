@@ -122,7 +122,8 @@
         <div class="mb-2 text-cyan-400 font-mono text-sm tracking-widest">
         </div>
         
-         <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+        <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+          <div id="camera-luar" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
           <img src="map-luar.png" class="w-full h-full object-contain">
           <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"
           ></div>
@@ -333,6 +334,56 @@
   { x: 536, y: 35, w: 20, h: 50},
   ];
 
+  const daftarRintanganLuar = [
+  // gedung basecamp bawah
+  { x: 125, y: 92, w: 236, h: 136 },
+
+  // gedung basecamp atap
+  { x: 173, y: 0, w: 152, h: 96 },
+
+  // 2 toilet samping basecamp
+  { x: 353, y: 48, w: 192, h: 132 },
+
+  // kotak pos depan basecamp
+  { x: 313, y: 276, w: 48, h: 52 },
+
+  // jalan buntu
+  { x: 589, y: 1, w: 100, h: 55 },
+
+  // mobil container
+  { x: 185, y: 504, w: 92, h: 148 },
+
+  // kios A
+  { x: 85, y: 644, w: 180, h: 136 },
+
+  // pohons
+  { x: 269, y: 700, w: 148, h: 80 },
+
+  // kios B
+  { x: 409, y: 664, w: 132, h: 112 },
+
+  // mobil polisi
+  { x: 729, y: 652, w: 88, h: 128 },
+
+  // kolam taman
+  { x: 861, y: 504, w: 280, h: 232 },
+
+  // deret kursi lampu kulkas minuman 
+  { x: 901, y: 780, w: 292, h: 44 },
+
+  // mobil merah
+  { x: 861, y: 380, w: 140, h: 76 },
+
+  // free
+  // { x: 185, y: 504, w: 92, h: 148 },
+
+  // free
+  // { x: 85, y: 644, w: 180, h: 136 },
+
+  // free
+  // { x: 269, y: 700, w: 148, h: 80 },
+  ];
+
   function cekPintuKeluar(x, y) {
     const areaPintuKeluar = {
       minX: 311,
@@ -346,7 +397,31 @@
     }
   }
 
-  // DISINI
+  function updateKameraLuar() {
+    const camera = document.getElementById('camera-luar');
+    if (!camera) return;
+
+    const viewW = 800;
+    const viewH = 459;
+
+    const mapW = 1600;
+    const mapH = 918;
+
+    let camX = (viewW / 2) - posX;
+    let camY = (viewH / 2) - posY;
+
+    const minCamX = viewW - mapW;
+    const minCamY = viewH - mapH;
+    const maxCamX = 0;
+    const maxCamY = 0;
+
+    if (camX > maxCamX) camX = maxCamX;
+    if (camX < minCamX) camX = minCamX;
+    if (camY > maxCamY) camY = maxCamY;
+    if (camY < minCamY) camY = minCamY;
+
+    camera.style.transform = `translate(${camX}px, ${camY}px)`;
+  }
 
   function apakahAreaAman(nextX, nextY) {
     // lorong kanan
@@ -374,6 +449,24 @@
         nextY <= box.y + box.h
       ) {
         return false;
+      }
+    }
+
+    return true;
+  }
+
+  function apakahAreaLuarAman(nextX, nextY) {
+    if (nextX < 0 || nextX > 1540) return false;
+    if (nextY < 0 || nextY > 872) return false;
+
+    for (let box of daftarRintanganLuar) {
+      if (
+        nextX >= box.x &&
+        nextX <= box.x + box.w &&
+        nextY >= box.y &&
+        nextY <= box.y + box.h
+      ) {
+        return false; 
       }
     }
 
@@ -443,8 +536,10 @@
             cekPintuKeluar(posX, posY);
           }
         } else if (diMapLuar) {
-          posX =nextX;
-          posY = nextY;
+          if (apakahAreaLuarAman(nextX, nextY)) {
+            posX =nextX;
+            posY = nextY;
+          }
         }
 
         const waktuSekarang = Date.now();
@@ -462,6 +557,10 @@
       if (playerImg) {
         playerImg.style.left = posX + 'px';
         playerImg.style.top = posY + 'px';
+
+        if (diMapLuar) {
+          updateKameraLuar();
+        }
       }
     }
   });
@@ -502,8 +601,8 @@
       }
       
       
-      posX = 341;
-      posY = 200;
+      posX = 245;
+      posY = 240;
 
       const playerLuar = document.getElementById('player-luar')
 ;      if (playerLuar) {
@@ -512,7 +611,9 @@
         playerLuar.style.left = `${posX}px`;
         playerLuar.style.top = `${posY}px`;
       }
-    }, 200);
+
+      updateKameraLuar();
+    }, 1500);
   }
   </script>
 </body>
