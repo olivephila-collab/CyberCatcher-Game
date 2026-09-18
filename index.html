@@ -136,15 +136,15 @@
 
       <img id="dialog-portrait" src="" class="absolute bottom-12 left-4 h-64 md:h-80 object-contain drop-shadow-xl z-10 transition-all duration-200">
 
-      <div id="dialog-box" class="hidden fixed bottom-6 inset-x-0 mx-auto w-[90%] max-w-2xl bg-slate-900/95 border-2 border-cyan-400 rounded-xl p-4 z-[100] shadow-[0_0_30px_rgba(34,211,238,0.4)]">
+      <div id="dialog-box" class="relative z-20 bg-slate-900/95 border-2 border-cyan-400 rounded-xl p-4 shadow-[0_0_30px_rgba(34,211,238,0.4)]">
       <div class="flex itens-center gap-2 mb-1">
-        <span id="dialog-speaker" class="text-cyan-400 font-mono fony-bold text-sm uppercase"></span>
+        <span id="dialog-speaker" class="text-cyan-400 font-mono font-bold text-sm uppercase"></span>
       </div>
-      <p id="dialog-text" class="text-white font-mono text-sm leading-relaxed white-space-pre-wrap">
+      <p id="dialog-text" class="text-white font-mono text-sm leading-relaxed whitespace-pre-wrap">
         ...
       </p>
       <div class="mt-2 text-right">
-        <span class="text[10px] text-cyan-300 font-mono animate-pulse">[ Tekan SPASI untuk lanjut ]</span>
+        <span class="text-[10px] text-cyan-300 font-mono animate-pulse">[ Tekan SPASI atau ENTER untuk lanjut ]</span>
       </div>
     </div>
 
@@ -505,8 +505,15 @@
     const diBasecamp = basecamp && !basecamp.classList.contains('hidden');
     const diMapLuar = mapLuar && !mapLuar.classList.contains('hidden');
 
+    if (sedangDialog) {
+      if (e.code === 'Space') {
+        lanjutkanDialog();
+      }
+      return;
+    }
+
     if (isDialogActive) {
-      if (event.key === ' ') {
+      if (event.key === 'Space') {
         showNextDialog();
       }
 
@@ -660,12 +667,12 @@
     { 
       speaker: "{PLAYER}",
       portrait: "",
-      text: "Aduh.." 
+      text: "Laper." 
     },
     { 
       speaker: "{PLAYER}",
       portrait: "",
-      text: "Aduh.." 
+      text: "Beli mi level ah~" 
     },
   ];
 
@@ -699,7 +706,7 @@
 
       document.getElementById('dialog-speaker').innerText = speakerName;
 
-      const portraitImg = document.getElemenById('dialog-portrait');
+      const portraitImg = document.getElementById('dialog-portrait');
       if (portraitImg) {
         if (item.portrait) {
           portraitImg.src = item.portrait;
@@ -721,7 +728,7 @@
           charIndex++;
         } else {
           clearInterval(typingInterval);
-          typingInternal = null;
+          typingInterval = null;
         }
       }, 30);
 
@@ -736,7 +743,7 @@
     sedangPindahMap = true;
 
     const loading = document.getElementById('loading-screen');
-    const mapLuar = document.getElementbyId('map-luar');
+    const mapLuar = document.getElementById('map-luar');
     const mapPerbatasan = document.getElementById('map-perbatasan');
     
     if (loading) loading.classList.remove('hidden');
