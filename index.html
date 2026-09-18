@@ -96,7 +96,7 @@
         </div>
       </div>
     </div>
-  </div> 
+ </div> 
 
     <div id="basecamp" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
         <div class="mb-2 text-cyan-400 font-mono text-sm tracking-widest">
@@ -124,12 +124,32 @@
         
         <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
           <div id="camera-luar" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
+          <img id="npc-bapak" src="npc-bapak.png" class="z-25 absolute w-12 h-12 object-contain" style="top: 230px; left: 450px;">
           <img src="map-luar.png" class="w-full h-full object-contain">
-          <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"
-          ></div>
+          <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
           <img id="player-luar" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 300px; left: 341px;">
         </div>
+      </div>
     </div>
+    
+    <div id="dialog-container" class="hidden fixed bottom-4 inset-x-0 mx-auto w-[90%] max-w-2xl z-[100]">
+
+      <img id="dialog-portrait" src="" class="absolute bottom-12 left-4 h-64 md:h-80 object-contain drop-shadow-xl z-10 transition-all duration-200">
+
+      <div id="dialog-box" class="hidden fixed bottom-6 inset-x-0 mx-auto w-[90%] max-w-2xl bg-slate-900/95 border-2 border-cyan-400 rounded-xl p-4 z-[100] shadow-[0_0_30px_rgba(34,211,238,0.4)]">
+      <div class="flex itens-center gap-2 mb-1">
+        <span id="dialog-speaker" class="text-cyan-400 font-mono fony-bold text-sm uppercase"></span>
+      </div>
+      <p id="dialog-text" class="text-white font-mono text-sm leading-relaxed white-space-pre-wrap">
+        ...
+      </p>
+      <div class="mt-2 text-right">
+        <span class="text[10px] text-cyan-300 font-mono animate-pulse">[ Tekan SPASI untuk lanjut ]</span>
+      </div>
+    </div>
+
+  </div>
+
 
   <script>
     const gambar1 = "bg-start-1.jpeg";
@@ -138,6 +158,7 @@
     let isLocked = false;
     let stepKonfirmasi = 1;
     let sedangPindahMap = false;
+    let typingInterval = null;
 
     const animasiStart = setInterval(function() {
       const imgElement = document.getElementById("gambar-start");
@@ -484,6 +505,14 @@
     const diBasecamp = basecamp && !basecamp.classList.contains('hidden');
     const diMapLuar = mapLuar && !mapLuar.classList.contains('hidden');
 
+    if (isDialogActive) {
+      if (event.key === ' ') {
+        showNextDialog();
+      }
+
+      return;
+    }
+
     if (diBasecamp || diMapLuar) {
       console.log("X:", posX, "Y:", posY);
       const playerImg = diBasecamp
@@ -604,8 +633,8 @@
       posX = 245;
       posY = 240;
 
-      const playerLuar = document.getElementById('player-luar')
-;      if (playerLuar) {
+      const playerLuar = document.getElementById('player-luar');
+      if (playerLuar) {
         const awalan = inisialAgen(agentAktif);
         playerLuar.src = `char animated/${awalan}-diamDepan.png`
         playerLuar.style.left = `${posX}px`;
@@ -613,7 +642,125 @@
       }
 
       updateKameraLuar();
+
+      startDialog(dialogKeluarBasecamp);
     }, 1500);
+  }
+
+  let isDialogActive = false;
+  let currentDialogIndex = 0;
+  let currentDialogList = [];
+
+  const dialogKeluarBasecamp = [
+    { 
+      speaker: "{PLAYER}",
+      portrait: "",
+      text: "Aduh.." 
+    },
+    { 
+      speaker: "{PLAYER}",
+      portrait: "",
+      text: "Aduh.." 
+    },
+    { 
+      speaker: "{PLAYER}",
+      portrait: "",
+      text: "Aduh.." 
+    },
+  ];
+
+  function startDialog(dialogArray) {
+    isDialogActive = true;
+    currentDialogList = dialogArray;
+    currentDialogIndex = 0;
+
+    const dialogContainer = document.getElementById('dialog-container');
+    if (dialogContainer) dialogContainer.classList.remove('hidden');
+
+    showNextDialog();
+  }
+
+  function showNextDialog() {
+    if (typingInterval) {
+      clearInterval(typingInterval);
+      typingInterval = null;
+      const item = currentDialogList[currentDialogIndex - 1];
+      document.getElementById('dialog-text').innerText = item.text;
+      return;
+    }
+
+    if (currentDialogIndex < currentDialogList.length) {
+      const item = currentDialogList[currentDialogIndex];
+
+      let speakerName = item.speaker;
+      if (speakerName === "{PLAYER}") {
+        speakerName = namaAgentTerpilih || "PLAYER";
+      }
+
+      document.getElementById('dialog-speaker').innerText = speakerName;
+
+      const portraitImg = document.getElemenById('dialog-portrait');
+      if (portraitImg) {
+        if (item.portrait) {
+          portraitImg.src = item.portrait;
+          portraitImg.classList.remove('hidden');
+        } else {
+          portraitImg.classList.add('hidden');
+        }
+      }
+     
+      const targetElement = document.getElementById('dialog-text');
+      targetElement.textContent = '';
+
+      let charIndex = 0;
+      const fullText = item.text;
+      const speed = 30;
+
+      typingInterval = setInterval(() => {
+        if (charIndex < fullText.length) {
+          targetElement.textContent = fullText.slice(0, charIndex + 1);
+          charIndex++;
+        } else {
+          clearInterval(typingInterval);
+          typingInternal = null;
+        }
+      }, speed);
+
+      currentDialogIndex++;
+    } else {
+      isDialogActive = false;
+      document.getElementById('dialog-container').classList.add('hidden');
+    }
+  }
+
+  function pindahMapPerbatasan() {
+    sedangPindahMap = true;
+
+    const loading = document.getElementById('loading-screen');
+    const mapLuar = document.getElementbyId('map-luar');
+    const mapPerbatasan = document.getElementById('map-perbatasan');
+    
+    if (loading) loading.classList.remove('hidden');
+
+    setTimeout(() => {
+      if (mapLuar) mapLuar.classList.add('hidden');
+      if (loading) loading.classList.add('hidden');
+
+      if (mapPerbatasan) mapPerbatasan.classList.remove('hidden');
+
+      posX = 50;
+      posY = 400;
+
+      const playerPerbatasan = document.getElementById('player-perbatasan');
+      if (playerPerbatasan) {
+        const awalan = inisialAgen(agentAktif);
+        playerPerbatasan.src = `char animated/${awalan}-diamDepan.png`;
+        playerPerbatasan.style.left = `${posX}px`;
+        playerPerbatasan.style.top = `${posY}px`;
+      }
+
+      sedangPindahMap = false;
+    }, 300);
   }
   </script>
 </body>
