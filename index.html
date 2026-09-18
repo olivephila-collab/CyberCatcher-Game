@@ -714,7 +714,6 @@
 
       let charIndex = 0;
       const fullText = item.text;
-      const speed = 30;
 
       typingInterval = setInterval(() => {
         if (charIndex < fullText.length) {
@@ -724,7 +723,7 @@
           clearInterval(typingInterval);
           typingInternal = null;
         }
-      }, speed);
+      }, 30);
 
       currentDialogIndex++;
     } else {
