@@ -106,6 +106,8 @@
           <img src="basecamp.png" class="w-full h-full object-contain">
           <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"
           ></div>
+          <img id="npc-basecamp-1" class="z-25 absolute w-12 h-12 object-contain" style="top: 90px; left: 430px;">
+          <img id="npc-basecamp-2" class="z-25 absolute w-12 h-12 object-contain" style="top: 240px; left: 470px;">
           <img id="player" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 145px; left: 341px;">
         </div>
 
@@ -114,7 +116,7 @@
         </div>
     </div>
 
-    <div id="loading-screen" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
+    <div id="loading-screen" class="hidden fixed inset-0 z-[100] bg-slate-950 flex flex-col items-center justify-center p-4">
       <h2 class="text-2xl text-cyan-400 font-mono mb-4">Bentar yaa..</h2>
     </div>
 
@@ -132,15 +134,15 @@
       </div>
     </div>
     
-    <div id="dialog-container" class="hidden fixed bottom-4 inset-x-0 mx-auto w-[90%] max-w-2xl z-[100]">
+    <div id="dialog-container" class="hidden fixed bottom-4 inset-x-0 mx-auto w-[94%] max-w-4xl z-[100]">
 
       <img id="dialog-portrait" src="" class="absolute bottom-12 left-4 h-64 md:h-80 object-contain drop-shadow-xl z-10 transition-all duration-200">
 
-      <div id="dialog-box" class="relative z-20 bg-slate-900/95 border-2 border-cyan-400 rounded-xl p-4 shadow-[0_0_30px_rgba(34,211,238,0.4)]">
+      <div id="dialog-box" class="relative z-20 bg-slate-900/95 border-2 border-cyan-400 rounded-xl p-6 shadow-[0_0_30px_rgba(34,211,238,0.4)]">
       <div class="flex itens-center gap-2 mb-1">
         <span id="dialog-speaker" class="text-cyan-400 font-mono font-bold text-sm uppercase"></span>
       </div>
-      <p id="dialog-text" class="text-white font-mono text-sm leading-relaxed whitespace-pre-wrap">
+      <p id="dialog-text" class="text-white font-mono text-base leading-relaxed whitespace-pre-wrap">
         ...
       </p>
       <div class="mt-2 text-right">
@@ -148,6 +150,37 @@
       </div>
     </div>
 
+  </div>
+
+  <div id="kota-jalanKanan" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
+    <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+      <div id="camera-kota-sebelah" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
+        <img src="jalan-kanan.png" class="w-full h-full object-contain">
+        <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
+        <img id="player-kotaKanan" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 240px; left: 50px;">
+      </div>
+    </div>
+  </div>
+
+  <div id="map-perbatasan" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
+    <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+      <div id="camera-perbatasan" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
+        <img src="hutan-entrance.png" class="w-full h-full object-contain">
+        <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
+        <img id="player-perbatasanHutan" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 800px; left: 800px;">
+      </div>
+    </div>
+  </div>
+
+   <div id="map-hutan" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
+    <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+      
+      <div id="camera-hutan" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
+        <img src="hutan.png" class="w-full h-full object-contain">
+        <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
+        <img id="player-hutan" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 800px; left: 800px;">
+      </div>
+    </div>
   </div>
 
 
@@ -159,6 +192,7 @@
     let stepKonfirmasi = 1;
     let sedangPindahMap = false;
     let typingInterval = null;
+    let sedangDialog = false;
 
     const animasiStart = setInterval(function() {
       const imgElement = document.getElementById("gambar-start");
@@ -191,6 +225,25 @@
         if (keyAgent === 'k3') return 'B';
         return keyAgent;
       }
+
+    function tampilkanNpcBasecamp() {
+      const npcKarakter = listKarakter.filter(karakter => karakter.key !== agentAktif);
+      const posisiNpc = [
+        { top: 90, left: 430 },
+        { top: 240, left: 470 }
+      ];
+
+      npcKarakter.forEach((karakter, index) => {
+        const npc = document.getElementById(`npc-basecamp-${index + 1}`);
+        if (!npc) return;
+
+        const awalan = inisialAgen(karakter.key);
+        npc.src = `char animated/${awalan}-diamDepan.png`;
+        npc.alt = karakter.nama;
+        npc.style.top = `${posisiNpc[index].top}px`;
+        npc.style.left = `${posisiNpc[index].left}px`;
+      });
+    }
 
     function updateTampilanCarousel() {
       const total = listKarakter.length;
@@ -281,6 +334,8 @@
             playerImg.src = `char animated/${awalan}-diamDepan.png`;
           }
 
+          tampilkanNpcBasecamp();
+
           const basecamp = document.getElementById('basecamp');
           if (basecamp) {
             basecamp.classList.remove('hidden');
@@ -327,6 +382,10 @@
   let arahTerakhir = 'Depan';
   const kecepatan = 4;
   let petunjuk = false;
+  let diMapLuar = false;
+  let diKotaSebelahStatus = false;
+  let diPerbatasanHutan = false;
+  let diHutan = false;
 
   const daftarRintangan = [
   // meja resepsionis
@@ -403,6 +462,24 @@
 
   // free
   // { x: 269, y: 700, w: 148, h: 80 },
+  ];
+
+  const daftarRintanganKotaSebelah = [
+  // pagar kiri
+  { x: 190, y: 100, w: 52, h: 316 },
+  ];
+
+  const daftarRintanganPerbatasanHutan = [
+  // hutan kiri
+  { x: 480, y: 2, w: 240, h: 396 },
+
+  // hutan kanan
+  { x: 824, y: 2, w: 240, h: 396 },
+  ];
+
+  const daftarRintanganHutan = [
+  //
+  // { x: 0, y: 0, w: 0, h: 0 },
   ];
 
   function cekPintuKeluar(x, y) {
@@ -494,6 +571,138 @@
     return true;
   }
 
+  function apakahAreaKotaSebelahAman(nextX, nextY) {
+    if (nextX < 0 || nextX > 1540) return false;
+    if (nextY < 0 || nextY > 872) return false;
+
+    for (let box of daftarRintanganKotaSebelah) {
+      if (
+        nextX >= box.x &&
+        nextX <= box.x + box.w &&
+        nextY >= box.y &&
+        nextY <= box.y + box.h
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function apakahAreaPerbatasanAman(nextX, nextY) {
+    if (nextX < 0 || nextX > 1540) return false;
+    if (nextY < 0 || nextY > 872) return false;
+
+    for (let box of daftarRintanganPerbatasanHutan) {
+      if (
+        nextX >= box.x &&
+        nextX <= box.x + box.w &&
+        nextY >= box.y &&
+        nextY <= box.y + box.h
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function apakahAreaHutanAman(nextX, nextY) {
+    if (nextX < 0 || nextX > 1540) return false;
+    if (nextY < 0 || nextY > 872) return false;
+
+    for (let box of daftarRintanganHutan) {
+      if (
+        nextX >= box.x &&
+        nextX <= box.x + box.w &&
+        nextY >= box.y &&
+        nextY <= box.y + box.h
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function updateKameraKotaSebelah() {
+    const camera = document.getElementById('camera-kota-sebelah');
+    if (!camera) return;
+
+    const viewW = 800;
+    const viewH = 459;
+
+    const mapW = 1600;
+    const mapH = 918;
+
+    let camX = (viewW / 2) - posX;
+    let camY = (viewH / 2) - posY;
+
+    const minCamX = viewW - mapW;
+    const minCamY = viewH - mapH;
+    const maxCamX = 0;
+    const maxCamY = 0;
+
+    if (camX > maxCamX) camX = maxCamX;
+    if (camX < minCamX) camX = minCamX;
+    if (camY > maxCamY) camY = maxCamY;
+    if (camY < minCamY) camY = minCamY;
+
+    camera.style.transform = `translate(${camX}px, ${camY}px)`;
+  }
+
+  function updateKameraPerbatasanHutan() {
+    const camera = document.getElementById('camera-perbatasan');
+    if (!camera) return;
+
+    const viewW = 800;
+    const viewH = 459;
+
+    const mapW = 1600;
+    const mapH = 918;
+
+    let camX = (viewW / 2) - posX;
+    let camY = (viewH / 2) - posY;
+
+    const minCamX = viewW - mapW;
+    const minCamY = viewH - mapH;
+    const maxCamX = 0;
+    const maxCamY = 0;
+
+    if (camX > maxCamX) camX = maxCamX;
+    if (camX < minCamX) camX = minCamX;
+    if (camY > maxCamY) camY = maxCamY;
+    if (camY < minCamY) camY = minCamY;
+
+    camera.style.transform = `translate(${camX}px, ${camY}px)`;
+  }
+
+  function updateKameraHutan() {
+    const camera = document.getElementById('camera-hutan');
+    if (!camera) return;
+
+    const viewW = 800;
+    const viewH = 459;
+
+    const mapW = 1600;
+    const mapH = 918;
+
+    let camX = (viewW / 2) - posX;
+    let camY = (viewH / 2) - posY;
+
+    const minCamX = viewW - mapW;
+    const minCamY = viewH - mapH;
+    const maxCamX = 0;
+    const maxCamY = 0;
+
+    if (camX > maxCamX) camX = maxCamX;
+    if (camX < minCamX) camX = minCamX;
+    if (camY > maxCamY) camY = maxCamY;
+    if (camY < minCamY) camY = minCamY;
+
+    camera.style.transform = `translate(${camX}px, ${camY}px)`;
+  }
+
   let frameLari = 1;
   let waktuLangkahTerakhir = 0;
   const jedaAntaraLangkah = 200;
@@ -501,30 +710,44 @@
   window.addEventListener('keydown', function(event) {
     const basecamp = document.getElementById('basecamp');
     const mapLuar = document.getElementById('map-luar');
+    const kotaSebelah = document.getElementById('kota-jalanKanan');
+    const perbatasanHutan = document.getElementById('map-perbatasan');
+    const hutan = document.getElementById('map-hutan')
 
     const diBasecamp = basecamp && !basecamp.classList.contains('hidden');
     const diMapLuar = mapLuar && !mapLuar.classList.contains('hidden');
+    const diKotaSebelah = kotaSebelah && !kotaSebelah.classList.contains('hidden');
+    const diPerbatasanHutan = perbatasanHutan && !perbatasanHutan.classList.contains('hidden');
+    const diHutan = hutan && !hutan.classList.contains('hidden');
 
     if (sedangDialog) {
-      if (e.code === 'Space') {
+      if (event.code === 'Space') {
         lanjutkanDialog();
       }
       return;
     }
 
     if (isDialogActive) {
-      if (event.key === 'Space') {
+      if (event.key === 'Space' || event.key === ' ' || event.key === 'Enter') {
         showNextDialog();
       }
 
       return;
     }
 
-    if (diBasecamp || diMapLuar) {
+    if (diBasecamp || diMapLuar || diKotaSebelah || diPerbatasanHutan || diHutan) {
       console.log("X:", posX, "Y:", posY);
-      const playerImg = diBasecamp
-        ? document.getElementById('player')
-        : document.getElementById('player-luar')
+       const playerImg = diBasecamp
+          ? document.getElementById('player')
+          : diMapLuar
+            ? document.getElementById('player-luar')
+            : diKotaSebelah
+              ? document.getElementById('player-kotaKanan')
+              : diPerbatasanHutan
+                ? document.getElementById('player-perbatasanHutan')
+                : diHutan
+                  ? document.getElementById('player-hutan')
+                  : null;
 
       const awalan = inisialAgen(agentAktif);
 
@@ -573,8 +796,31 @@
           }
         } else if (diMapLuar) {
           if (apakahAreaLuarAman(nextX, nextY)) {
-            posX =nextX;
+            posX = nextX;
             posY = nextY;
+
+            cekPintuLuarKeKotaSebelah(posX, posY);
+          }
+        } else if (diKotaSebelah) {
+          if (apakahAreaKotaSebelahAman(nextX, nextY)) {
+            posX = nextX;
+            posY = nextY;
+
+            cekPintuKePerbatasan(posX, posY);
+          }
+        } else if (diPerbatasanHutan) {
+          if (apakahAreaPerbatasanAman(nextX, nextY)) {
+            posX = nextX;
+            posY = nextY;
+
+            cekPintuKeHutan(posX, posY);
+          }
+        } else if (diHutan) {
+          if (apakahAreaHutanAman(nextX, nextY)) {
+            posX = nextX;
+            posY = nextY;
+
+
           }
         }
 
@@ -596,19 +842,82 @@
 
         if (diMapLuar) {
           updateKameraLuar();
+        } else if (diKotaSebelah) {
+          updateKameraKotaSebelah();
+        } else if (diPerbatasanHutan) {
+          updateKameraPerbatasanHutan();
+        } else if (diHutan) {
+          updateKameraHutan();
         }
       }
     }
   });
 
+  function cekPintuLuarKeKotaSebelah(x, y) {
+    const areaPintuKeKotaSebelah = {
+      minX: 1445,
+      maxX: 1540,
+      minY: 400,
+      maxY: 600,
+    };
+
+    if (x >= areaPintuKeKotaSebelah.minX && x <= areaPintuKeKotaSebelah.maxX && y >= areaPintuKeKotaSebelah.minY && y <= areaPintuKeKotaSebelah.maxY && !sedangPindahMap) {
+      pindahMapKotaSebelah();
+    }
+  }
+
+  function cekPintuKePerbatasan(x, y) {
+    const areaPintuKePerbatasan = {
+      minX: 594,
+      maxX: 950,
+      minY: 1,
+      maxY: 5,
+    };
+
+    if (x >= areaPintuKePerbatasan.minX && x <= areaPintuKePerbatasan.maxX && y >= areaPintuKePerbatasan.minY && y <= areaPintuKePerbatasan.maxY && !sedangPindahMap) {
+      pindahMapPerbatasan();
+    }
+  }
+
+  function cekPintuKeHutan(x, y) {
+    const areaPintuKeHutan = {
+      minX: 736,
+      maxX: 808,
+      minY: 1,
+      maxY: 5,
+    };
+
+    if (x >= areaPintuKeHutan.minX && x <= areaPintuKeHutan.maxX && y >= areaPintuKeHutan.minY && y <= areaPintuKeHutan.maxY && !sedangPindahMap) {
+      pindahMapHutan();
+    }
+  }
+
   window.addEventListener('keyup', function(event) {
+    if (isDialogActive) return;
+    
     const basecamp = document.getElementById('basecamp');
     const mapLuar = document.getElementById('map-luar');
+    const kotaSebelah = document.getElementById('kota-jalanKanan');
+    const perbatasanHutan = document.getElementById('map-perbatasan');
+    const hutan = document.getElementById('map-hutan');
 
     const diBasecamp = basecamp && !basecamp.classList.contains('hidden');
+    const diMapLuar = mapLuar && !mapLuar.classList.contains('hidden');
+    const diKotaSebelah = kotaSebelah && !kotaSebelah.classList.contains('hidden');
+    const diPerbatasanHutan = perbatasanHutan && !perbatasanHutan.classList.contains('hidden');
+    const diHutan = hutan && !hutan.classList.contains('hidden');
+
     const playerImg = diBasecamp
       ? document.getElementById('player')
-      : document.getElementById('player-luar')
+      : diMapLuar
+        ? document.getElementById('player-luar')
+        : diKotaSebelah
+          ? document.getElementById('player-kotaKanan')
+          : diPerbatasanHutan
+            ? document.getElementById('player-perbatasanHutan')
+            : diHutan 
+              ? document.getElementById('player-hutan')
+              : null;
 
     const awalan = inisialAgen(agentAktif);
 
@@ -651,6 +960,7 @@
       updateKameraLuar();
 
       startDialog(dialogKeluarBasecamp);
+      sedangPindahMap = false;
     }, 1500);
   }
 
@@ -736,38 +1046,108 @@
     } else {
       isDialogActive = false;
       document.getElementById('dialog-container').classList.add('hidden');
+
+      arahTerakhir = 'Depan';
+      const playerLuar = document.getElementById('player-luar');
+      if (playerLuar) {
+        const awalan = inisialAgen(agentAktif);
+        playerLuar.src = `char animated/${awalan}-diamDepan.png`;
+      }
     }
   }
 
-  function pindahMapPerbatasan() {
-    sedangPindahMap = true;
+function pindahMapKotaSebelah() {
+  sedangPindahMap = true;
 
-    const loading = document.getElementById('loading-screen');
-    const mapLuar = document.getElementById('map-luar');
-    const mapPerbatasan = document.getElementById('map-perbatasan');
-    
-    if (loading) loading.classList.remove('hidden');
+  const loading = document.getElementById('loading-screen');
+  if (loading) loading.classList.remove('hidden');
 
-    setTimeout(() => {
-      if (mapLuar) mapLuar.classList.add('hidden');
-      if (loading) loading.classList.add('hidden');
+  setTimeout(() => {
+    document.getElementById('map-luar')?.classList.add('hidden');
+    if (loading) loading.classList.add('hidden');
+    document.getElementById('kota-jalanKanan')?.classList.remove('hidden');
 
-      if (mapPerbatasan) mapPerbatasan.classList.remove('hidden');
+    diMapLuar = false;
+    diKotaSebelahStatus = true;
 
-      posX = 50;
-      posY = 400;
+    posX = 94;
+    posY = 492;
 
-      const playerPerbatasan = document.getElementById('player-perbatasan');
-      if (playerPerbatasan) {
-        const awalan = inisialAgen(agentAktif);
-        playerPerbatasan.src = `char animated/${awalan}-diamDepan.png`;
-        playerPerbatasan.style.left = `${posX}px`;
-        playerPerbatasan.style.top = `${posY}px`;
-      }
+    const player = document.getElementById('player-kotaKanan');
+    if (player) {
+      const awalan = inisialAgen(agentAktif);
+      player.src = `char animated/${awalan}-diamKanan.png`;
+      player.style.left = `${posX}px`;
+      player.style.top = `${posY}px`;
+    }
 
-      sedangPindahMap = false;
-    }, 300);
-  }
+    updateKameraKotaSebelah();
+
+    sedangPindahMap = false;
+  }, 1000);
+}
+
+
+function pindahMapPerbatasan() {
+  sedangPindahMap = true;
+  
+  const loading = document.getElementById('loading-screen');
+  if (loading) loading.classList.remove('hidden');
+
+  setTimeout(() => {
+    document.getElementById('kota-jalanKanan')?.classList.add('hidden');
+    if (loading) loading.classList.add('hidden');
+    document.getElementById('map-perbatasan')?.classList.remove('hidden');
+
+    diKotaSebelahStatus = false;
+    diPerbatasanHutan = true;
+
+    posX = 776; 
+    posY = 850;
+
+    const player = document.getElementById('player-perbatasanHutan');
+    if (player) {
+      const awalan = inisialAgen(agentAktif);
+      player.src = `char animated/${awalan}-diamBelakang.png`;
+      player.style.left = `${posX}px`;
+      player.style.top = `${posY}px`;
+    }
+
+    updateKameraPerbatasanHutan();
+
+    sedangPindahMap = false;
+  }, 1000);
+}
+
+function pindahMapHutan() {
+  sedangPindahMap = true;
+  const loading = document.getElementById('loading-screen');
+  if (loading) loading.classList.remove('hidden');
+
+  setTimeout(() => {
+    document.getElementById('map-perbatasan')?.classList.add('hidden');
+    if (loading) loading.classList.add('hidden');
+    document.getElementById('map-hutan')?.classList.remove('hidden');
+
+    diPerbatasanHutan = false;
+    diHutan = true;
+
+    posX = 800;
+    posY = 850;
+
+    const player = document.getElementById('player-hutan');
+    if (player) {
+      const awalan = inisialAgen(agentAktif);
+      player.src = `char animated/${awalan}-diamBelakang.png`;
+      player.style.left = `${posX}px`;
+      player.style.top = `${posY}px`;
+    }
+
+    updateKameraHutan();
+
+    sedangPindahMap = false;
+  }, 1000);
+}
   </script>
 </body>
 </html>
