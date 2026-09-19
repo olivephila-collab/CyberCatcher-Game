@@ -29,12 +29,15 @@
 
     <h1 class="text-4xl font-extrabold text-indigo-400 mb-2">CYBER CATCHER</h1>
     <p class="text-slate-300 mb-6">Interactive Cybersecurity Mini-Game</p>
+    <div class="absolute bottom-20 left-0 right-0 mx-auto w-fit bg-slate-900/90 p-2 rounded-lg border border-indigo-500 max-w-[200px] text-center z-10">
+      <p class="text-xs font-bold text-indigo-400">WELCOME TO CYBER CATCHER!</p>
+    </div>
 
     <div class="relative w-full max-w-xl rounded-2xl overflow-hidden border-4 border-indigo-500 shadow-2xl">
 
         <div id="start-screen" class="relative">
             <img id="gambar-start" src="bg-start-1.jpeg" alt="Start Screen CyberCatcher" class="w-full h-auto">
-
+            
             <div class="absolute inset-0 flex items-center justify-center">
 
                 <button onclick="mulaiGame()" class="absolute bottom-[24%] w-36 h-36 bg-transparent rounded-full cursor-pointer transition border-2 border-transparent"></button>
@@ -224,7 +227,19 @@
         if (keyAgent === 'k2') return 'A';
         if (keyAgent === 'k3') return 'B';
         return keyAgent;
-      }
+    }
+
+    const cyberHandbook = {
+      npcList: [
+        {
+          id: 'npc-nabila',
+          nama: 'Nabila',
+          foto: '',
+          deskripsi: '',
+          unlocked: false
+        }
+      ]
+    }
 
     function tampilkanNpcBasecamp() {
       const npcKarakter = listKarakter.filter(karakter => karakter.key !== agentAktif);
