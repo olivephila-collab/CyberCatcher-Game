@@ -101,10 +101,17 @@
     </div>
  </div> 
 
- <button onclick="bukaProfil()" class="absolute top-4 z-20 w-12 bg-slate-900/80 hover:bg-slate-800 border-2 border-indigo-500 rounded-xl p-1 shadow-lg backdrop-blur transition-all active:scale-95 group">
+ <button id="btn-profil" onclick="bukaProfil()" class="hidden absolute top-4 z-20 w-12 bg-slate-900/80 hover:bg-slate-800 border-2 border-indigo-500 rounded-xl p-1 shadow-lg backdrop-blur transition-all active:scale-95 group">
     <img id="hud-foto-agen" src="assets/agen-default.png" alt="Profile" class="w-full object-contain pixelated">
     <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-slate-900"></span>
  </button>
+
+ <div id="modal-profil" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+     
+     <div class="relative w-full max-w-sm bg-slate-800 border-2 border-slate-600 rounded-2xl p-5 text-white font-mono shadow-2xl">
+         <button onclick="tutupProfil()" class="absolute top-3 right-3 text-slate-400 hover"
+     </div>
+ </div>
 
     <div id="basecamp" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
         <div class="mb-2 text-cyan-400 font-mono text-sm tracking-widest">
