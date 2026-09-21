@@ -29,7 +29,7 @@
 
     <h1 class="text-4xl font-extrabold text-indigo-400 mb-2">CYBER CATCHER</h1>
     <p class="text-slate-300 mb-6">Interactive Cybersecurity Mini-Game</p>
-    <div class="absolute bottom-20 left-0 right-0 mx-auto w-fit bg-slate-900/90 p-2 rounded-lg border border-indigo-500 max-w-[200px] text-center z-10">
+    <div class="pointer-events-none absolute bottom-20 left-0 right-0 mx-auto w-fit bg-slate-900/90 p-2 rounded-lg border border-indigo-500 max-w-[200px] text-center z-6">
       <p class="text-xs font-bold text-indigo-400">WELCOME TO CYBER CATCHER!</p>
     </div>
 
@@ -102,7 +102,7 @@
  </div> 
 
  <button id="btn-profil" onclick="bukaProfil()" class="hidden absolute top-4 z-20 w-12 bg-slate-900/80 hover:bg-slate-800 border-2 border-indigo-500 rounded-xl p-1 shadow-lg backdrop-blur transition-all active:scale-95 group">
-    <img id="hud-foto-agen" src="assets/agen-default.png" alt="Profile" class="w-full object-contain pixelated">
+    <img id="hud-foto-agen" src="char animated/L-diamDepan.png" alt="Profile" class="w-full object-contain pixelated">
     <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-slate-900"></span>
  </button>
 
@@ -121,7 +121,7 @@
 
          <div class="flex gap-4 items-center mb-4">
             <div class="w-16 h-16 shrink-0 bg-slate-900 border-2 border-indigo-400 rounded-lg overflow-hidden p-1">
-              <img id="modal-foto-agen" src="assets/agen-default.png" alt="Foto Agen" class="w-full h-full object-contain pixelated">
+              <img id="modal-foto-agen" src="char animated/L-diamDepan.png" alt="Foto Agen" class="w-full h-full object-contain pixelated">
             </div>
             <div class="flex-1 min-w-0">
                <h2 id="modal-nama-agen" class="text-base font-bold text-slate-100 truncate">
@@ -156,10 +156,13 @@
           <img id="npc-basecamp-1" class="z-25 absolute w-12 h-12 object-contain" style="top: 90px; left: 430px;">
           <img id="npc-basecamp-2" class="z-25 absolute w-12 h-12 object-contain" style="top: 240px; left: 470px;">
           <img id="player" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 145px; left: 341px;">
+          <div id="interact-prompt" class="hidden pointer-events-none absolute z-40 flex h-6 w-6 items-center justify-center border-2 border-cyan-300 bg-slate-950 text-[11px] font-bold font-mono text-cyan-300 shadow-[2px_2px_0_rgba(8,145,178,0.8)]" style="image-rendering: pixelated;">
+            E
+          </div>
         </div>
 
         <div id="petunjuk" class="mt-4 text-slate-400 text-xs font-mono">
-          Gunakan tombol panah atau WASD untuk menggerakkan karakter. Tekan tombol spasi untuk melakukan aksi.
+          Gunakan tombol panah atau WASD untuk bergerak. Tekan E atau spasi saat berada dekat NPC untuk berinteraksi.
         </div>
     </div>
 
@@ -173,7 +176,7 @@
         
         <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
           <div id="camera-luar" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
-          <img id="npc-bapak" src="npc-bapak.png" class="z-25 absolute w-12 h-12 object-contain" style="top: 230px; left: 450px;">
+          <img id="npc-bapak" src="char animated/B-diamDepan.png" alt="Bapak" class="z-25 absolute w-12 h-12 object-contain" style="top: 230px; left: 450px;">
           <img src="map-luar.png" class="w-full h-full object-contain">
           <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
           <img id="player-luar" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 300px; left: 341px;">
@@ -465,8 +468,8 @@
           menuPilih.classList.remove('scale-125', 'blur-md', 'opacity-0');
 
           const playerImg = document.getElementById('player');
+          const awalan = inisialAgen(agentAktif);
           if (playerImg) {
-            const awalan = inisialAgen(agentAktif);
             playerImg.src = `char animated/${awalan}-diamDepan.png`;
           }
 
@@ -476,6 +479,10 @@
           if (basecamp) {
             basecamp.classList.remove('hidden');
           }
+          const profil = document.getElementById('btn-profil');
+          const fotoProfil = document.getElementById('hud-foto-agen');
+          if (fotoProfil) fotoProfil.src = `char animated/${awalan}-diamDepan.png`;
+          if (profil) profil.classList.remove('hidden');
         }, 200);
       }
     }
@@ -518,10 +525,92 @@
   let arahTerakhir = 'Depan';
   const kecepatan = 4;
   let petunjuk = false;
+
+  const dialogNpcBasecamp = [
+    {
+      id: 'npc-basecamp-1',
+      nama: 'Ayu',
+      x: 430,
+      y: 90,
+      dialog: [
+        { speaker: 'Ayu', portrait: '', text: 'Hei, partner! Basecamp aman untuk sekarang.' },
+        { speaker: 'Ayu', portrait: '', text: 'Kalau sudah siap, kita bisa lanjut menjelajah.' }
+      ]
+    },
+    {
+      id: 'npc-basecamp-2',
+      nama: 'Bahtiar',
+      x: 470,
+      y: 240,
+      dialog: [
+        { speaker: 'Bahtiar', portrait: '', text: 'Yo! Jangan lupa cek sekitar sebelum berangkat.' },
+        { speaker: 'Bahtiar', portrait: '', text: 'Siapa tahu ada sesuatu yang bisa membantu misi kita.' }
+      ]
+    }
+  ];
+
+  function cariNpcTerdekat() {
+    let npcTerdekat = null;
+    let jarakTerdekat = Infinity;
+
+    for (const npc of dialogNpcBasecamp) {
+      const jarak = Math.hypot(posX - npc.x, posY - npc.y);
+      if (jarak < jarakTerdekat) {
+        jarakTerdekat = jarak;
+        npcTerdekat = npc;
+      }
+    }
+
+    return jarakTerdekat <= 70 ? npcTerdekat : null;
+  }
+
+  function interaksiBasecamp() {
+    const npc = cariNpcTerdekat();
+    if (npc) {
+      document.getElementById('interact-prompt')?.classList.add('hidden');
+      startDialog(npc.dialog);
+    }
+  }
+
+  function updatePromptInteraksi() {
+    const prompt = document.getElementById('interact-prompt');
+    const npc = cariNpcTerdekat();
+    if (!prompt) return;
+
+    if (!npc || isDialogActive) {
+      prompt.classList.add('hidden');
+      return;
+    }
+
+    prompt.style.left = `${npc.x + 38}px`;
+    prompt.style.top = `${npc.y + 11}px`;
+    prompt.classList.remove('hidden');
+  }
+
   let diMapLuar = false;
   let diKotaSebelahStatus = false;
   let diPerbatasanHutan = false;
   let diHutan = false;
+
+  function bukaProfil() {
+    document.getElementById('modal-profil').classList.remove('hidden');
+  }
+
+  function tutupProfil() {
+    document.getElementById('modal-profil').classList.add('hidden');
+  }
+
+  function masukKeMap(karakterPilihan) {
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('char-select-screen').classList.add('hidden');
+
+    document.getElementById('game-canvas').src = karakterPilihan.foto;
+    document.getElementById('modal-foto-agen').src = karakterPilihan.foto;
+    document.getElementById('modal-nama-agen').innerText = karakterPilihan.nama;
+
+    document.getElementById('btn-profil-hud').classList.remove('hidden');
+  }
+  
 
   const daftarRintangan = [
   // meja resepsionis
@@ -858,7 +947,7 @@
 
     if (sedangDialog) {
       if (event.code === 'Space') {
-        lanjutkanDialog();
+        showNextDialog();
       }
       return;
     }
@@ -868,6 +957,12 @@
         showNextDialog();
       }
 
+      return;
+    }
+
+    if (diBasecamp && (event.code === 'Space' || event.code === 'Enter' || event.key.toLowerCase() === 'e')) {
+      event.preventDefault();
+      interaksiBasecamp();
       return;
     }
 
@@ -975,6 +1070,10 @@
       if (playerImg) {
         playerImg.style.left = posX + 'px';
         playerImg.style.top = posY + 'px';
+
+        if (diBasecamp) {
+          updatePromptInteraksi();
+        }
 
         if (diMapLuar) {
           updateKameraLuar();
