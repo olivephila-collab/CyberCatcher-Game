@@ -108,9 +108,41 @@
 
  <div id="modal-profil" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
      
-     <div class="relative w-full max-w-sm bg-slate-800 border-2 border-slate-600 rounded-2xl p-5 text-white font-mono shadow-2xl">
-         <button onclick="tutupProfil()" class="absolute top-3 right-3 text-slate-400 hover"
-     </div>
+      <div class="relative w-full max-w-sm bg-slate-800 border-2 border-slate-600 rounded-2xl p-5 text-white font-mono shadow-2xl">
+         <button onclick="tutupProfil()" class="absolute top-3 right-3 text-slate-400 hover:bg-slate-700">
+             X
+         </button>
+
+         <div class="mb-2">
+            <span class="bg-emerald-500 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+               Player Status 
+            </span>
+         </div>
+
+         <div class="flex gap-4 items-center mb-4">
+            <div class="w-16 h-16 shrink-0 bg-slate-900 border-2 border-indigo-400 rounded-lg overflow-hidden p-1">
+              <img id="modal-foto-agen" src="assets/agen-default.png" alt="Foto Agen" class="w-full h-full object-contain pixelated">
+            </div>
+            <div class="flex-1 min-w-0">
+               <h2 id="modal-nama-agen" class="text-base font-bold text-slate-100 truncate">
+                 Lily
+               </h2>
+               <p class="text-xs text-indigo-400 mt-0.5">Cyber Agent</p>
+            </div>
+         </div>
+
+         <div class="space-y-2 mt-4">
+            <button onclick="bukaHandbook('npc')" class="w-full bg-slate-700 hover:bg-slate-600 border border-slate-500 py-2.5 px-4 rounded-xl flex justify-between items-center text-xs transition-all">
+               <span>Handbook NPC</span>
+               <span class="bg-indigo-500/30 text-indigo-300 px-2 py-0.5 rounded text-[10px]" id="count-npc">0/8</span>
+            </button>
+
+            <button onclick="bukaHandbook('materi')" class="w-full bg-slate-700 hover:bg-slate-600 border border-slate-500 py-2.5 px-4 rounded-xl flex justify-between items-center text-xs transition-all">
+                <span> Handbook Informasi</span>
+                <span class="bg-emerald-500/30 text-emerald-300 px-2 py-0.5 rounded text-[10px]" id="count-materi">0/3</span>
+            </button>
+         </div>
+      </div>
  </div>
 
     <div id="basecamp" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
