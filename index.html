@@ -249,10 +249,8 @@
     </div>
   </div>
 
-  <!-- QUEST TRACKER WIDGET -->
-<div id="quest-tracker" class="fixed top-6 left-6 z-30 w-64 bg-slate-900/85 backdrop-blur-md border border-indigo-500/50 rounded-xl p-3.5 shadow-lg shadow-indigo-950/40 text-left transition-all hover:border-indigo-400">
+<div id="quest-tracker" class="hidden fixed top-6 left-6 z-[60] w-64 bg-slate-900/85 backdrop-blur-md border border-indigo-500/50 rounded-xl p-3.5 shadow-lg shadow-indigo-950/40 text-left transition-all hover:border-indigo-400">
   
-  <!-- Header Quest Widget -->
   <div class="flex items-center justify-between border-b border-slate-700/60 pb-2 mb-2.5">
     <div class="flex items-center gap-2">
       <span class="relative flex h-2.5 w-2.5">
@@ -264,7 +262,6 @@
     <span class="text-[10px] bg-indigo-950 text-indigo-300 px-1.5 py-0.5 rounded border border-indigo-700/50 font-mono">CHAPTER 1</span>
   </div>
 
-  <!-- Detail Misi Utama -->
   <div class="space-y-1.5">
     <p id="quest-title" class="text-xs font-bold text-slate-100">Persiapan Awal</p>
     <p id="quest-desc" class="text-[11px] text-slate-300 leading-relaxed">
@@ -272,7 +269,6 @@
     </p>
   </div>
 
-  <!-- Checklist Objectives -->
   <div id="quest-checklist" class="mt-3 space-y-1.5 text-[11px]">
     <div class="flex items-start gap-2 text-amber-300 font-medium">
       <input type="checkbox" id="chk-basecamp" disabled class="mt-0.5 rounded border-amber-500">
@@ -445,6 +441,7 @@
         }
       ],
     }
+  
 
     function tampilkanNpcBasecamp() {
       const npcKarakter = listKarakter.filter(karakter => karakter.key !== agentAktif);
@@ -561,6 +558,11 @@
           const basecamp = document.getElementById('basecamp');
           if (basecamp) {
             basecamp.classList.remove('hidden');
+          }
+          const questTracker = document.getElementById('quest-tracker');
+          if (questTracker) {
+            questTracker.classList.remove('hidden');
+            updateQuestTracker('basecamp');
           }
           const profil = document.getElementById('btn-profil');
           const fotoProfil = document.getElementById('hud-foto-agen');
@@ -1269,6 +1271,7 @@
       if (mapLuar) {
         mapLuar.classList.remove('hidden');
       }
+      updateQuestTracker('outside');
       
       
       posX = 245;
