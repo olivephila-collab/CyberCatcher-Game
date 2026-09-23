@@ -27,15 +27,30 @@
       </div>
     </div>
 
-    <h1 class="text-4xl font-extrabold text-indigo-400 mb-2">CYBER CATCHER</h1>
-    <p class="text-slate-300 mb-6">Interactive Cybersecurity Mini-Game</p>
-    <div class="pointer-events-none absolute bottom-20 left-0 right-0 mx-auto w-fit bg-slate-900/90 p-2 rounded-lg border border-indigo-500 max-w-[200px] text-center z-6">
-      <p class="text-xs font-bold text-indigo-400">WELCOME TO CYBER CATCHER!</p>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0,15)_0%,transparent_70%)] pointer-events-none"></div>
+
+          <div id="start-decorations">
+            <img src="asset-gamebot.png" class="absolute bottom-[18vh] right-[4vw] w-24 h-24 pixelated animate-bounce z-10 pointer-events-none drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" alt="Aset Gamebot">
+            <img src="asset-gantungan.png" class="absolute top-[10vh] left-[30vw] w-24 h-24 pixelated animate-bounce z-10 pointer-events-none drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" alt="Aset Gantungan">
+            <img src="asset-hp.png" class="absolute top-[42vh] left-[4vw] w-24 h-24 pixelated animate-bounce z-10 pointer-events-none drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" alt="Aset HP">
+            <img src="asset-kristal.png" class="absolute top-[24vh] right-[24vw] w-24 h-24 pixelated animate-bounce z-10 pointer-events-none drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" alt="Aset Kristal">
+            <img src="asset-telponLipat.png" class="absolute bottom-[2vh] left-[32vw] -translate-x-1/2 w-24 h-24 pixelated animate-bounce z-10 pointer-events-none drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" alt="Aset Telpon Lipat">
+          </div>
+           
     </div>
 
-    <div class="relative w-full max-w-xl rounded-2xl overflow-hidden border-4 border-indigo-500 shadow-2xl">
+    <h1 class="text-4xl font-extrabold text-indigo-400 mb-2">CYBER CATCHER</h1>
+    <p class="text-slate-300 mb-6">Interactive Cybersecurity Mini-Game</p>
+    <div id="welcome-banner" class="pointer-events-none absolute bottom-20 left-0 right-0 mx-auto w-fit bg-slate-900/90 p-2 rounded-lg border border-indigo-500 max-w-[200px] text-center z-5">
+      <p class="text-xs font-bold text-indigo-400">WELCOME TO CYBER CATCHER!</p>
+    </div>
+    
 
+    <div class="relative z-5 w-full max-w-xl rounded-2xl overflow-hidden border-4 border-indigo-500 shadow-2xl">
+    
         <div id="start-screen" class="relative">
+
+    
             <img id="gambar-start" src="bg-start-1.jpeg" alt="Start Screen CyberCatcher" class="w-full h-auto">
             
             <div class="absolute inset-0 flex items-center justify-center">
@@ -174,9 +189,9 @@
         <div class="mb-2 text-cyan-400 font-mono text-sm tracking-widest">
         </div>
         
-        <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+        <div class="relative w-[min(92vw,800px)] aspect-[800/459] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
           <div id="camera-luar" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
-          <img id="npc-bapak" src="char animated/B-diamDepan.png" alt="Bapak" class="z-25 absolute w-12 h-12 object-contain" style="top: 230px; left: 450px;">
+          <img id="npc-bapak" src="npc/npc-bapak" alt="Bapak" class="z-25 absolute w-12 h-12 object-contain" style="top: 230px; left: 450px;">
           <img src="map-luar.png" class="w-full h-full object-contain">
           <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
           <img id="player-luar" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 300px; left: 341px;">
@@ -203,7 +218,7 @@
   </div>
 
   <div id="kota-jalanKanan" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
-    <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+    <div class="relative w-[min(92vw,800px)] aspect-[800/459] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
       <div id="camera-kota-sebelah" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
         <img src="jalan-kanan.png" class="w-full h-full object-contain">
         <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
@@ -213,7 +228,7 @@
   </div>
 
   <div id="map-perbatasan" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
-    <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+    <div class="relative w-[min(92vw,800px)] aspect-[800/459] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
       <div id="camera-perbatasan" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
         <img src="hutan-entrance.png" class="w-full h-full object-contain">
         <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
@@ -223,15 +238,49 @@
   </div>
 
    <div id="map-hutan" class="hidden fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
-    <div class="relative w-[800px] h-[459px] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+    <div class="relative w-[min(92vw,800px)] aspect-[800/459] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
       
       <div id="camera-hutan" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
+        <img id="boss-naga" src="boss/naga-malware" alt="Naga Hijau" class="z-25 absolute w-12 h-12 object-contain" style="top: 230px; left: 450px;">
         <img src="hutan.png" class="w-full h-full object-contain">
         <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
         <img id="player-hutan" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 800px; left: 800px;">
       </div>
     </div>
   </div>
+
+  <!-- QUEST TRACKER WIDGET -->
+<div id="quest-tracker" class="fixed top-6 left-6 z-30 w-64 bg-slate-900/85 backdrop-blur-md border border-indigo-500/50 rounded-xl p-3.5 shadow-lg shadow-indigo-950/40 text-left transition-all hover:border-indigo-400">
+  
+  <!-- Header Quest Widget -->
+  <div class="flex items-center justify-between border-b border-slate-700/60 pb-2 mb-2.5">
+    <div class="flex items-center gap-2">
+      <span class="relative flex h-2.5 w-2.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+      </span>
+      <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-300">Misi Aktif</h3>
+    </div>
+    <span class="text-[10px] bg-indigo-950 text-indigo-300 px-1.5 py-0.5 rounded border border-indigo-700/50 font-mono">CHAPTER 1</span>
+  </div>
+
+  <!-- Detail Misi Utama -->
+  <div class="space-y-1.5">
+    <p id="quest-title" class="text-xs font-bold text-slate-100">Persiapan Awal</p>
+    <p id="quest-desc" class="text-[11px] text-slate-300 leading-relaxed">
+      Selesaikan persiapan di dalam Basecamp sebelum memulai investigasi.
+    </p>
+  </div>
+
+  <!-- Checklist Objectives -->
+  <div id="quest-checklist" class="mt-3 space-y-1.5 text-[11px]">
+    <div class="flex items-start gap-2 text-amber-300 font-medium">
+      <input type="checkbox" id="chk-basecamp" disabled class="mt-0.5 rounded border-amber-500">
+      <span>Keluar dari Basecamp & cek keadaan sekitar</span>
+    </div>
+  </div>
+
+</div>
 
 
   <script>
@@ -257,7 +306,39 @@
       }
     }, 400);
 
-   
+    function updateQuestTracker(mapSaatIni) {
+      const questTitle = document.getElementById('quest-title');
+      const questDesc = document.getElementById('quest-desc');
+      const questChecklist = document.getElementById('quest-checklist');
+
+      if (mapSaatIni === 'basecamp') {
+      questTitle.innerText = "Persiapan Awal";
+      questDesc.innerText = "Persiapkan dirimu dan periksa situasi sekitar.";
+      questChecklist.innerHTML = `
+        <div class="flex items-start gap-2 text-amber-300 font-medium">
+          <input type="checkbox" disabled class="mt-0.5 rounded border-amber-500">
+          <span>Keluar dari Basecamp & cek keadaan sekitar</span>
+        </div>
+      `;
+      } else if (mapSaatIni === 'kota' || mapSaatIni === 'outside') {
+        questTitle.innerText = "Investigasi Malware Warga";
+        questDesc.innerText = "Keluar dari Basecamp berhasil! Periksa HP warga yang terkena wabah Malware.";
+        questChecklist.innerHTML = `
+          <div class="flex items-start gap-2 text-slate-300">
+            <input type="checkbox" checked disabled class="mt-0.5 accent-indigo-500 rounded cursor-not-allowed">
+            <span class="line-through text-slate-500">Keluar dari Basecamp</span>
+          </div>
+          <div class="flex items-start gap-2 text-amber-300 font-medium">
+            <input type="checkbox" disabled class="mt-0.5 rounded border-amber-500">
+            <span>Bersihkan malware dari 3 warga di kerumunan (0/3)</span>
+          </div>
+          <div class="flex items-start gap-2 text-slate-400">
+            <input type="checkbox" disabled class="mt-0.5 rounded border-slate-600">
+            <span>Temukan sumber sinyal Wi-Fi mencurigakan</span>
+          </div>
+        `;
+      }
+    }
 
     const listKarakter = [
       { id: 1, key: "k1", nama: "Lily", warna: "from-indigo-700 to-indigo-900", pesan: "Hei, heii! The name's Lily! So glad we teamed up, partner! Now buckle up and win this game! Shall we?" },
@@ -418,6 +499,8 @@
     }
 
     function mulaiGame() {
+      document.getElementById("start-decorations").classList.add("hidden");
+      document.getElementById("welcome-banner").classList.add("hidden");
       document.getElementById("gambar-start").classList.add("hidden");
       clearInterval(animasiStart);
       document.getElementById("start-screen").classList.add("hidden");
@@ -720,12 +803,22 @@
     }
   }
 
+  function ukuranKamera(camera) {
+    const viewport = camera.parentElement;
+    const skala = viewport.clientWidth / 800;
+
+    return {
+      viewW: viewport.clientWidth / skala,
+      viewH: viewport.clientHeight / skala,
+      skala,
+    };
+  }
+
   function updateKameraLuar() {
     const camera = document.getElementById('camera-luar');
     if (!camera) return;
 
-    const viewW = 800;
-    const viewH = 459;
+    const { viewW, viewH, skala } = ukuranKamera(camera);
 
     const mapW = 1600;
     const mapH = 918;
@@ -743,7 +836,7 @@
     if (camY > maxCamY) camY = maxCamY;
     if (camY < minCamY) camY = minCamY;
 
-    camera.style.transform = `translate(${camX}px, ${camY}px)`;
+    camera.style.transform = `translate(${camX * skala}px, ${camY * skala}px) scale(${skala})`;
   }
 
   function apakahAreaAman(nextX, nextY) {
@@ -854,8 +947,7 @@
     const camera = document.getElementById('camera-kota-sebelah');
     if (!camera) return;
 
-    const viewW = 800;
-    const viewH = 459;
+    const { viewW, viewH, skala } = ukuranKamera(camera);
 
     const mapW = 1600;
     const mapH = 918;
@@ -873,15 +965,14 @@
     if (camY > maxCamY) camY = maxCamY;
     if (camY < minCamY) camY = minCamY;
 
-    camera.style.transform = `translate(${camX}px, ${camY}px)`;
+    camera.style.transform = `translate(${camX * skala}px, ${camY * skala}px) scale(${skala})`;
   }
 
   function updateKameraPerbatasanHutan() {
     const camera = document.getElementById('camera-perbatasan');
     if (!camera) return;
 
-    const viewW = 800;
-    const viewH = 459;
+    const { viewW, viewH, skala } = ukuranKamera(camera);
 
     const mapW = 1600;
     const mapH = 918;
@@ -899,15 +990,14 @@
     if (camY > maxCamY) camY = maxCamY;
     if (camY < minCamY) camY = minCamY;
 
-    camera.style.transform = `translate(${camX}px, ${camY}px)`;
+    camera.style.transform = `translate(${camX * skala}px, ${camY * skala}px) scale(${skala})`;
   }
 
   function updateKameraHutan() {
     const camera = document.getElementById('camera-hutan');
     if (!camera) return;
 
-    const viewW = 800;
-    const viewH = 459;
+    const { viewW, viewH, skala } = ukuranKamera(camera);
 
     const mapW = 1600;
     const mapH = 918;
@@ -925,7 +1015,7 @@
     if (camY > maxCamY) camY = maxCamY;
     if (camY < minCamY) camY = minCamY;
 
-    camera.style.transform = `translate(${camX}px, ${camY}px)`;
+    camera.style.transform = `translate(${camX * skala}px, ${camY * skala}px) scale(${skala})`;
   }
 
   let frameLari = 1;
