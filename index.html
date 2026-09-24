@@ -1374,21 +1374,22 @@
   let currentDialogIndex = 0;
   let currentDialogList = [];
   let sudahDialogKeluarBasecamp = false;
+  const awalan = inisialAgen(agentAktif);
 
   const dialogKeluarBasecamp = [
     { 
       speaker: "{PLAYER}",
-      portrait: "${awalan}-senang.png",
+      portrait: `char dialog/${awalan}-senang.png`,
       text: "Wahh.. cerahnya hari ini." 
     },
     { 
       speaker: "{PLAYER}",
-      portrait: "${awalan}-penasaran.png",
+      portrait: `char dialog/${awalan}-penasaran.png`,
       text: "Eh? Itu kenapa tuh pada ngumpul disitu?" 
     },
     { 
       speaker: "{PLAYER}",
-      portrait: "${awalan}-serius.png",
+      portrait: `char dialog/${awalan}-serius.png`,
       text: "Coba aku samperin dulu!" 
     },
   ];
