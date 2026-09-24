@@ -191,7 +191,9 @@
         
         <div class="relative w-[min(92vw,800px)] aspect-[800/459] rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
           <div id="camera-luar" class="absolute top-0 left-0 w-[1600px] h-[918px] transition-transform duration-75 ease-out">
-          <img id="npc-bapak" src="npc/npc-bapak" alt="Bapak" class="z-25 absolute w-12 h-12 object-contain" style="top: 230px; left: 450px;">
+          <img id="npc-jovan" src="npc-jovan.png" alt="Jovan" class="z-25 absolute w-12 h-12 object-contain" style="top: 380px; left: 450px;">
+          <img id="npc-jashon" src="npc-jashon.png" alt="Jashon" class="z-25 absolute w-12 h-12 object-contain" style="top: 490px; left: 390px;">
+          <img id="npc-sandrina" src="npc-sandrina.png" alt="Sandrina" class="z-25 absolute w-12 h-12 object-contain" style="top: 490px; left: 480px;">
           <img src="map-luar.png" class="w-full h-full object-contain">
           <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
           <img id="player-luar" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 300px; left: 341px;">
@@ -264,9 +266,6 @@
 
   <div class="space-y-1.5">
     <p id="quest-title" class="text-xs font-bold text-slate-100">Persiapan Awal</p>
-    <p id="quest-desc" class="text-[11px] text-slate-300 leading-relaxed">
-      Selesaikan persiapan di dalam Basecamp sebelum memulai investigasi.
-    </p>
   </div>
 
   <div id="quest-checklist" class="mt-3 space-y-1.5 text-[11px]">
@@ -304,12 +303,10 @@
 
     function updateQuestTracker(mapSaatIni) {
       const questTitle = document.getElementById('quest-title');
-      const questDesc = document.getElementById('quest-desc');
       const questChecklist = document.getElementById('quest-checklist');
 
       if (mapSaatIni === 'basecamp') {
       questTitle.innerText = "Persiapan Awal";
-      questDesc.innerText = "Persiapkan dirimu dan periksa situasi sekitar.";
       questChecklist.innerHTML = `
         <div class="flex items-start gap-2 text-amber-300 font-medium">
           <input type="checkbox" disabled class="mt-0.5 rounded border-amber-500">
@@ -317,8 +314,7 @@
         </div>
       `;
       } else if (mapSaatIni === 'kota' || mapSaatIni === 'outside') {
-        questTitle.innerText = "Investigasi Malware Warga";
-        questDesc.innerText = "Keluar dari Basecamp berhasil! Periksa HP warga yang terkena wabah Malware.";
+        questTitle.innerText = "Investigasi Kerumunan  Warga";
         questChecklist.innerHTML = `
           <div class="flex items-start gap-2 text-slate-300">
             <input type="checkbox" checked disabled class="mt-0.5 accent-indigo-500 rounded cursor-not-allowed">
@@ -326,9 +322,9 @@
           </div>
           <div class="flex items-start gap-2 text-amber-300 font-medium">
             <input type="checkbox" disabled class="mt-0.5 rounded border-amber-500">
-            <span>Bersihkan malware dari 3 warga di kerumunan (0/3)</span>
+            <span>Hampiri salah satu warga yang berkerumun</span>
           </div>
-          <div class="flex items-start gap-2 text-slate-400">
+          <div class="hidden flex items-start gap-2 text-slate-400">
             <input type="checkbox" disabled class="mt-0.5 rounded border-slate-600">
             <span>Temukan sumber sinyal Wi-Fi mencurigakan</span>
           </div>
@@ -459,6 +455,14 @@
         npc.alt = karakter.nama;
         npc.style.top = `${posisiNpc[index].top}px`;
         npc.style.left = `${posisiNpc[index].left}px`;
+
+        const dialogNpc = dialogNpcBasecamp[index];
+        if (dialogNpc) {
+          dialogNpc.nama = karakter.nama;
+          dialogNpc.dialog.forEach(item => {
+            item.speaker = karakter.nama;
+          });
+        }
       });
     }
 
@@ -805,6 +809,32 @@
     }
   }
 
+  function cekPintuMasuk(x, y) {
+    const areaPintuMasuk = {
+      minX: 233,
+      maxX: 265,
+      minY: 232,
+      maxY: 236,
+    };
+
+    if (x >= areaPintuMasuk.minX && x <= areaPintuMasuk.maxX && y >= areaPintuMasuk.minY && y <= areaPintuMasuk.maxY && !sedangPindahMap) {
+      balikBasecamp();
+    }
+  }
+
+  function cekPintuMasukLuar(x, y) {
+    const areaPintuMasukLuar = {
+      minX: 86,
+      maxX: 94,
+      minY: 472,
+      maxY: 508,
+    };
+
+    if (x >= areaPintuMasukLuar.minX && x <= areaPintuMasukLuar.maxX && y >= areaPintuMasukLuar.minY && y <= areaPintuMasukLuar.maxY && !sedangPindahMap) {
+      balikMapLuar();
+    }
+  }
+
   function ukuranKamera(camera) {
     const viewport = camera.parentElement;
     const skala = viewport.clientWidth / 800;
@@ -1122,6 +1152,7 @@
             posX = nextX;
             posY = nextY;
 
+            cekPintuMasuk(posX, posY);
             cekPintuLuarKeKotaSebelah(posX, posY);
           }
         } else if (diKotaSebelah) {
@@ -1129,6 +1160,7 @@
             posX = nextX;
             posY = nextY;
 
+            cekPintuMasukLuar(posX, posY);
             cekPintuKePerbatasan(posX, posY);
           }
         } else if (diPerbatasanHutan) {
@@ -1259,6 +1291,9 @@
     const loading = document.getElementById('loading-screen');
     const basecamp = document.getElementById('basecamp');
     const mapLuar = document.getElementById('map-luar');
+    const questTracker = document.getElementById('quest-tracker');
+
+    if (questTracker) questTracker.classList.add('hidden');
     
     if (loading) {
       loading.classList.remove('hidden');
@@ -1287,7 +1322,50 @@
 
       updateKameraLuar();
 
-      startDialog(dialogKeluarBasecamp);
+      if (!sudahDialogKeluarBasecamp) {
+        startDialog(dialogKeluarBasecamp);
+      } else if (questTracker) {
+        questTracker.classList.remove('hidden');
+      }
+      sedangPindahMap = false;
+    }, 1500);
+  }
+
+  function balikBasecamp() {
+    sedangPindahMap = true;
+
+    const loading = document.getElementById('loading-screen');
+    const basecamp = document.getElementById('basecamp');
+    const mapLuar = document.getElementById('map-luar');
+    const questTracker = document.getElementById('quest-tracker');
+
+    if (questTracker) questTracker.classList.remove('hidden');
+    
+    if (loading) {
+      loading.classList.remove('hidden');
+    } 
+    
+
+    setTimeout(() => {
+      if (mapLuar) mapLuar.classList.add('hidden');
+      if (loading) loading.classList.add('hidden');
+      if (basecamp) {
+        basecamp.classList.remove('hidden');
+      }
+      updateQuestTracker('outside');
+      
+      
+      posX = 353;
+      posY = 8;
+
+      const playerImg = document.getElementById('player');
+      if (playerImg) {
+        const awalan = inisialAgen(agentAktif);
+        playerImg.src = `char animated/${awalan}-diamDepan.png`
+        playerImg.style.left = `${posX}px`;
+        playerImg.style.top = `${posY}px`;
+      }
+
       sedangPindahMap = false;
     }, 1500);
   }
@@ -1295,22 +1373,23 @@
   let isDialogActive = false;
   let currentDialogIndex = 0;
   let currentDialogList = [];
+  let sudahDialogKeluarBasecamp = false;
 
   const dialogKeluarBasecamp = [
     { 
       speaker: "{PLAYER}",
-      portrait: "",
-      text: "Aduh.." 
+      portrait: "${awalan}-senang.png",
+      text: "Wahh.. cerahnya hari ini." 
     },
     { 
       speaker: "{PLAYER}",
-      portrait: "",
-      text: "Laper." 
+      portrait: "${awalan}-penasaran.png",
+      text: "Eh? Itu kenapa tuh pada ngumpul disitu?" 
     },
     { 
       speaker: "{PLAYER}",
-      portrait: "",
-      text: "Beli mi level ah~" 
+      portrait: "${awalan}-serius.png",
+      text: "Coba aku samperin dulu!" 
     },
   ];
 
@@ -1372,8 +1451,15 @@
 
       currentDialogIndex++;
     } else {
+      const dialogSelesaiKeluarBasecamp = currentDialogList === dialogKeluarBasecamp;
       isDialogActive = false;
       document.getElementById('dialog-container').classList.add('hidden');
+
+      if (dialogSelesaiKeluarBasecamp) {
+        sudahDialogKeluarBasecamp = true;
+        const questTracker = document.getElementById('quest-tracker');
+        if (questTracker) questTracker.classList.remove('hidden');
+      }
 
       arahTerakhir = 'Depan';
       const playerLuar = document.getElementById('player-luar');
@@ -1414,6 +1500,45 @@ function pindahMapKotaSebelah() {
     sedangPindahMap = false;
   }, 1000);
 }
+
+ function balikMapLuar() {
+    sedangPindahMap = true;
+
+    const loading = document.getElementById('loading-screen');
+    const kotaSebelah = document.getElementById('kota-jalanKanan');
+    const mapLuar = document.getElementById('map-luar');
+    const questTracker = document.getElementById('quest-tracker');
+
+    if (questTracker) questTracker.classList.add('hidden');
+    
+    if (loading) {
+      loading.classList.remove('hidden');
+    } 
+    
+
+    setTimeout(() => {
+      if (kotaSebelah) kotaSebelah.classList.add('hidden');
+      if (loading) loading.classList.add('hidden');
+      if (mapLuar) {
+        mapLuar.classList.remove('hidden');
+      }
+      updateQuestTracker('outside');
+      
+      
+      posX = 1433;
+      posY = 488;
+
+      const playerLuar = document.getElementById('player-luar');
+      if (playerLuar) {
+        const awalan = inisialAgen(agentAktif);
+        playerLuar.src = `char animated/${awalan}-diamKiri.png`
+        playerLuar.style.left = `${posX}px`;
+        playerLuar.style.top = `${posY}px`;
+      }
+
+      sedangPindahMap = false;
+    }, 1500);
+  }
 
 
 function pindahMapPerbatasan() {
