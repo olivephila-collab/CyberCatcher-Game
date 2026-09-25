@@ -197,6 +197,9 @@
           <img src="map-luar.png" class="w-full h-full object-contain">
           <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.7)] z-20"></div>
           <img id="player-luar" src="char animated/L-diamDepan.png" class="z-30 absolute w-12 h-12 transition-all duration-75" style="top: 300px; left: 341px;">
+           <div id="interact-prompt-luar" class="hidden pointer-events-none absolute z-40 flex h-6 w-6 items-center justify-center border-2 border-cyan-300 bg-slate-950 text-[11px] font-bold font-mono text-cyan-300 shadow-[2px_2px_0_rgba(8,145,178,0.8)]" style="image-rendering: pixelated;">
+             E
+           </div>
         </div>
       </div>
     </div>
@@ -327,6 +330,22 @@
           <div class="hidden flex items-start gap-2 text-slate-400">
             <input type="checkbox" disabled class="mt-0.5 rounded border-slate-600">
             <span>Temukan sumber sinyal Wi-Fi mencurigakan</span>
+          </div>
+        `;
+      } else if (mapSaatIni === 'outside1') {
+        questTitle.innerText = "Investigasi Kerumunan  Warga";
+        questChecklist.innerHTML = `
+          <div class="flex items-start gap-2 text-slate-300">
+            <input type="checkbox" checked disabled class="mt-0.5 accent-indigo-500 rounded cursor-not-allowed">
+            <span class="line-through text-slate-500">Keluar dari Basecamp</span>
+          </div>
+          <div class="flex items-start gap-2 text-slate-300">
+            <input type="checkbox" checked disabled class="mt-0.5 accent-indigo-500 rounded cursor-not-allowed">
+            <span class="line-through text-slate-500">Hampiri salah satu warga yang berkerumun</span>
+          </div>
+          <div class="flex items-start gap-2 text-amber-300 font-medium">
+            <input type="checkbox" disabled class="mt-0.5 rounded border-amber-500">
+            <span>Tanya ke Bu Sandrina dan Jashon</span>
           </div>
         `;
       }
@@ -658,6 +677,79 @@
     if (npc) {
       document.getElementById('interact-prompt')?.classList.add('hidden');
       startDialog(npc.dialog);
+    }
+  }
+
+  const dialogJovan = [
+    { speaker: '{PLAYER}', portrait: '', text: 'Hei, Jovan!' },
+    { speaker: 'Jovan', portrait: '', text: 'Oh, hei juga!.' },
+    { speaker: '{PLAYER}', portrait: '', text: 'Ada apa sih ini rame-rame?' },
+    { speaker: 'Jovan', portrait: '', text: 'Itu loh, Bu Sandrina sama Jashon, data hp nya hilang total.' },
+    { speaker: '{PLAYER}', portrait: '', text: 'HAH?! KOK BISA?!' },
+    { speaker: 'Jovan', portrait: '', text: 'gatau tuh, coba tanya sana.' }
+  ];
+
+  const dialogKerumunan = [
+    { speaker: '{PLAYER}', portrait: '', text: 'Bu Sandrina, Jashon, emang bener ya data hp nya hilang semua?' },
+    { speaker: 'Bu Sandrina', portrait: '', text: 'Huhuhu.. iya nak, saya sedih banget huhu..' },
+    { speaker: '{PLAYER}', portrait: '', text: 'Kok bisa sih bu.. coba saya cek hp nya boleh?' },
+    { speaker: 'Bu Sandrina', portrait: '', text: 'Boleh nak, ini.' },
+  ];
+
+  let sudahInteraksiJovan = false;
+  let sudahInteraksiKerumunan = false;
+
+  function interaksiJovan() {
+    if (sudahInteraksiJovan) return;
+
+    const jarakJovan = Math.hypot(posX - 450, posY - 380);
+    if (jarakJovan <= 70) {
+      document.getElementById('interact-prompt-luar')?.classList.add('hidden');
+      startDialog(dialogJovan);
+    }
+  }
+
+  function interaksiKerumunan() {
+    if (sudahInteraksiKerumunan) return;
+
+    const jarakKerumunan = Math.hypot(posX - 425, posY - 456);
+    if (jarakKerumunan <= 70) {
+      document.getElementById('interact-prompt-luar')?.classList.add('hidden');
+      startDialog(dialogKerumunan);
+    }
+  }
+
+  function updatePromptJovan() {
+    const prompt = document.getElementById('interact-prompt-luar');
+    if (!prompt || sudahInteraksiJovan || isDialogActive) {
+      prompt?.classList.add('hidden');
+      return;
+    }
+
+    const jarakJovan = Math.hypot(posX - 450, posY - 380);
+    if (jarakJovan <= 70) {
+      prompt.style.left = '488px';
+      prompt.style.top = '391px';
+      prompt.classList.remove('hidden');
+    } else {
+      prompt.classList.add('hidden');
+    }
+  }
+
+  function updatePromptKerumunan() {
+    const prompt = document.getElementById('interact-prompt-luar');
+    if (!prompt || sudahInteraksiKerumunan || isDialogActive) {
+      prompt?.classList.add('hidden');
+      return;
+    }
+
+    const jarakKerumunan = Math.hypot(posX - 425, posY - 456);
+    if (jarakKerumunan <= 70) {
+      prompt.style.left = '488px';
+      prompt.style.top = '391px';
+      prompt.classList.remove('hidden');
+    } else {
+      prompt.classList.add('hidden');
     }
   }
 
@@ -1088,6 +1180,16 @@
       return;
     }
 
+    if (diMapLuar && (event.code === 'Space' || event.code === 'Enter' || event.key.toLowerCase() === 'e')) {
+      event.preventDefault();
+      if (sudahInteraksiJovan) {
+        interaksiKerumunan();
+      } else {
+        interaksiJovan();
+      }
+      return;
+    }
+
     if (diBasecamp || diMapLuar || diKotaSebelah || diPerbatasanHutan || diHutan) {
       console.log("X:", posX, "Y:", posY);
        const playerImg = diBasecamp
@@ -1200,6 +1302,14 @@
         }
 
         if (diMapLuar) {
+          if (sudahInteraksiJovan) {
+            updatePromptKerumunan();
+          } else {
+            updatePromptJovan();
+          }
+        }
+
+        if (diMapLuar) {
           updateKameraLuar();
         } else if (diKotaSebelah) {
           updateKameraKotaSebelah();
@@ -1220,7 +1330,7 @@
       maxY: 600,
     };
 
-    if (x >= areaPintuKeKotaSebelah.minX && x <= areaPintuKeKotaSebelah.maxX && y >= areaPintuKeKotaSebelah.minY && y <= areaPintuKeKotaSebelah.maxY && !sedangPindahMap) {
+    if (x >= areaPintuKeKotaSebelah.minX && x <= areaPintuKeKotaSebelah.maxX && y >= areaPintuKeKotaSebelah.minY && y <= areaPintuKeKotaSebelah.maxY && !sedangPindahMap && sudahInteraksiJovan) {
       pindahMapKotaSebelah();
     }
   }
@@ -1460,6 +1570,17 @@
         sudahDialogKeluarBasecamp = true;
         const questTracker = document.getElementById('quest-tracker');
         if (questTracker) questTracker.classList.remove('hidden');
+      }
+
+      if (currentDialogList === dialogJovan) {
+        sudahInteraksiJovan = true;
+        updateQuestTracker('outside1');
+        updatePromptKerumunan();
+      }
+
+      if (currentDialogList === dialogKerumunan) {
+        sudahInteraksiKerumunan = true;
+        updateQuestTracker('outside');
       }
 
       arahTerakhir = 'Depan';
